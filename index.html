@@ -7,7 +7,8 @@
 <title>Instituto ARIA — Acolher para cuidar, cuidar para transformar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700&family=Montserrat:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito+Sans:opsz,wght@6..12,300;6..12,400;6..12,500;6..12,600;6..12,700&family=Montserrat:wght@400;500;600;700&display=swap"></noscript>
 <style>
 /* ═══════════════════════════════════════════════════════
    INSTITUTO ARIA — V3 REDESIGN
@@ -59,7 +60,7 @@
 
 /* ─── 2. RESET ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 body {
   font-family: 'Nunito Sans', system-ui, sans-serif;
   background: var(--aria-cream);
@@ -885,6 +886,7 @@ footer::before {
   .hero-grid{grid-template-columns:1fr;}
   .hero-visual{display:none;}
   .hero-section{min-height:auto;padding-top:10px;}
+  .hero-nav{padding:18px 20px;}
   .hero-body{padding:120px 0 60px;}
   .hero-nav-links{display:none;}
   .hero-hamburger{display:flex;}
@@ -905,6 +907,15 @@ footer::before {
 @media (max-width:480px) {
   .grid-4{grid-template-columns:1fr;}
   .stat-num{font-size:44px;}
+}
+@media (max-width:768px) {
+  /* Plantas: tamanho original fixo, sem variação de escala */
+  .plant-graphic.born { transform: scale(1) !important; }
+  /* Slots menores no mobile */
+  .plant-point .plant-slot { width: 32px; margin-left: -16px; }
+  .plant-slot.wide        { width: 46px; margin-left: -23px; }
+  .plant-point.nav-deco .plant-slot      { width: 22px; margin-left: -11px; }
+  .plant-point.nav-deco .plant-slot.wide { width: 30px; margin-left: -15px; }
 }
 </style>
 
@@ -1078,7 +1089,7 @@ footer::before {
 <!-- ║  BARRA DE ANÚNCIO               ║ -->
 <!-- ╚══════════════════════════════════╝ -->
 <div id="announce-bar">
-  <span>🌸 Temos vagas para voluntários em Marituba — <a onclick="showPage('apoie')">Saiba como participar</a></span>
+  <span>🌸 Temos vagas para voluntários em Marituba — <a href="#" onclick="showPage('apoie')">Saiba como participar</a></span>
   <button class="ann-close" onclick="this.parentElement.style.display='none'; updateNavTop();" aria-label="Fechar anúncio">
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M1 1l12 12M13 1L1 13"/></svg>
   </button>
@@ -1119,11 +1130,11 @@ footer::before {
   <!-- Botanical decoration — gerenciado pelo sistema de jardim -->
   <div id="sway-slow-zone-1" style="position:absolute;inset:0;pointer-events:none;overflow:visible;" class="plant-zone sway-slow-zone" data-plant-sym="plant-slow-1"></div>
   <nav class="overlay-nav" aria-label="Navegação mobile">
-    <a onclick="showPage('home')" role="button" tabindex="0">Início</a>
-    <a onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a>
-    <a onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a>
-    <a onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a>
-    <a onclick="showPage('contato')" role="button" tabindex="0">Contato</a>
+    <a href="#" onclick="showPage('home')" role="button" tabindex="0">Início</a>
+    <a href="#" onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a>
+    <a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a>
+    <a href="#" onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a>
+    <a href="#" onclick="showPage('contato')" role="button" tabindex="0">Contato</a>
   </nav>
   <button class="btn-gold overlay-cta" onclick="showPage('apoie')" style="font-size:17px;padding:16px 40px;">Apoie o ARIA ✦</button>
   <p class="overlay-contact" style="margin-top:30px;">
@@ -2228,7 +2239,7 @@ footer::before {
         </div>
         <button type="submit" class="btn-primary form-submit">Entrar</button>
       </form>
-      <p style="font-size:12px;color:var(--aria-muted);margin-top:16px;">Problemas com acesso? <a onclick="showPage('contato')" style="color:var(--aria-wine);cursor:pointer;">Entre em contato</a></p>
+      <p style="font-size:12px;color:var(--aria-muted);margin-top:16px;">Problemas com acesso? <a href="#" onclick="showPage('contato')" style="color:var(--aria-wine);cursor:pointer;">Entre em contato</a></p>
     </div>
   </div>
 </div><!-- /page-restrita -->
@@ -2325,13 +2336,13 @@ footer::before {
       <div class="footer-col">
         <h5>Navegação</h5>
         <ul>
-          <li><a onclick="showPage('home')" role="button" tabindex="0">Início</a></li>
-          <li><a onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a></li>
-          <li><a onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a></li>
-          <li><a onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a></li>
-          <li><a onclick="showPage('apoie')" role="button" tabindex="0">Apoie</a></li>
-          <li><a onclick="showPage('contato')" role="button" tabindex="0">Contato</a></li>
-          <li><a onclick="showPage('restrita')" role="button" tabindex="0">Área Restrita</a></li>
+          <li><a href="#" onclick="showPage('home')" role="button" tabindex="0">Início</a></li>
+          <li><a href="#" onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a></li>
+          <li><a href="#" onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a></li>
+          <li><a href="#" onclick="showPage('apoie')" role="button" tabindex="0">Apoie</a></li>
+          <li><a href="#" onclick="showPage('contato')" role="button" tabindex="0">Contato</a></li>
+          <li><a href="#" onclick="showPage('restrita')" role="button" tabindex="0">Área Restrita</a></li>
         </ul>
       </div>
 
@@ -2339,11 +2350,11 @@ footer::before {
       <div class="footer-col">
         <h5>Projetos</h5>
         <ul>
-          <li><a onclick="showPage('projetos')" role="button" tabindex="0">Florescer</a></li>
-          <li><a onclick="showPage('projetos')" role="button" tabindex="0">Viralatinha</a></li>
-          <li><a onclick="showPage('projetos')" role="button" tabindex="0">Rede de Cuidados</a></li>
-          <li><a onclick="showPage('projetos')" role="button" tabindex="0">ARIA Educa</a></li>
-          <li><a onclick="showPage('projetos')" role="button" tabindex="0">Horta Comunitária</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Florescer</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Viralatinha</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Rede de Cuidados</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">ARIA Educa</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Horta Comunitária</a></li>
         </ul>
       </div>
 
@@ -2378,8 +2389,8 @@ footer::before {
     <div class="footer-bottom">
       <span>© 2025 Instituto ARIA · Todos os direitos reservados</span>
       <div class="footer-bottom-links">
-        <a onclick="showPage('privacidade')" role="button" tabindex="0">Política de Privacidade</a>
-        <a onclick="showPage('privacidade')" role="button" tabindex="0">Termos de Uso</a>
+        <a href="#" onclick="showPage('privacidade')" role="button" tabindex="0">Política de Privacidade</a>
+        <a href="#" onclick="showPage('privacidade')" role="button" tabindex="0">Termos de Uso</a>
       </div>
     </div>
   </div>
@@ -2405,7 +2416,7 @@ footer::before {
 
 <!-- Cookie banner -->
 <div id="cookie" role="dialog" aria-label="Aviso de cookies" aria-live="polite">
-  <p>Usamos cookies essenciais e analíticos (anonimizados) para melhorar sua experiência. Leia nossa <a onclick="showPage('privacidade');hideCookie();">Política de Privacidade</a>.</p>
+  <p>Usamos cookies essenciais e analíticos (anonimizados) para melhorar sua experiência. Leia nossa <a href="#" onclick="showPage('privacidade');hideCookie();">Política de Privacidade</a>.</p>
   <div class="cookie-btns">
     <button class="btn-decline" onclick="hideCookie()">Recusar</button>
     <button class="btn-accept" onclick="hideCookie()">Aceitar</button>
@@ -2956,7 +2967,7 @@ window.showPage = function(id) {
   // uniforme entre todas as já plantadas até o momento.
   var giantRand    = mulberry32(baseSeed * 131 + 11);
   var GIANT_COUNT  = giantRand() < 0.5 ? 1 : 2;
-  var GIANT_SCALE  = '2.00'; // dobro do tamanho mínimo (mínimo = 1.0)
+  var GIANT_SCALE  = window.innerWidth < 768 ? '1.00' : '2.00'; // dobro no desktop; sem giant no mobile
   var giantSeen    = 0;      // total de plantas elegíveis já vistas no fluxo
   var giantReservoir = [];   // até GIANT_COUNT elementos <svg> escolhidos
 
