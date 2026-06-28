@@ -61,13 +61,15 @@
 
 /* ─── 2. RESET ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+html { font-size: 16px; }
 body {
   font-family: 'Nunito Sans', system-ui, sans-serif;
   background: var(--aria-cream);
   color: var(--aria-text);
   line-height: 1.72;
-  overflow-x: hidden;
+  position: relative;
+  max-width: 100vw;
+  overflow-x: clip; /* clip: corta overflow horizontal sem criar BFC — não interfere no scroll vertical */
 }
 img { display: block; max-width: 100%; }
 a { text-decoration: none; color: inherit; }
@@ -180,6 +182,7 @@ h4 { font-size: clamp(16px, 1.8vw, 22px); }
   flex-wrap: wrap;
   position: relative;
   z-index: 95;
+  overflow: hidden;
 }
 #announce-bar a { color: var(--aria-blush); font-weight:700; cursor:pointer; text-decoration:underline; white-space:nowrap; }
 .ann-close {
@@ -763,6 +766,120 @@ footer::before {
 /* Footer botanical bg */
 .footer-bg-botanical { position:absolute;bottom:-20px;right:-20px;opacity:.045;pointer-events:none;z-index:1; }
 
+/* ─── SACO DE SEMENTES (posição fixa) ─── */
+#seed-bag-container {
+  position: relative;
+  margin-left: 14px;
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+/* #seed-bag-container visível em todos os tamanhos de tela */
+#seed-bag-btn {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter .2s;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.45));
+}
+#seed-bag-btn:hover { filter: drop-shadow(0 0 10px rgba(198,161,91,.7)) drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+#seed-bag-btn:hover #seed-bag-svg { animation: bagShake .55s ease-in-out; }
+#seed-bag-btn.glowing {
+  animation: bagGlowPulse 1.2s ease-in-out 2 forwards;
+}
+#seed-bag-btn svg { width: 38px; height: 44px; flex-shrink: 0; }
+@keyframes bagShake {
+  0%,100%{transform:rotate(0)} 15%{transform:rotate(-8deg)} 30%{transform:rotate(8deg)}
+  45%{transform:rotate(-5deg)} 60%{transform:rotate(5deg)} 75%{transform:rotate(-2deg)} 90%{transform:rotate(2deg)}
+}
+@keyframes bagGlowPulse {
+  0%,100%{ filter: drop-shadow(0 0 4px rgba(198,161,91,.3)) drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+  50%{ filter: drop-shadow(0 0 18px rgba(198,161,91,.9)) drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+}
+#seed-help-btn {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid rgba(198,161,91,.38);
+  background: rgba(41,25,15,.84);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: rgba(250,247,239,.55);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s, color .2s;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,.32);
+}
+#seed-help-btn:hover { border-color: rgba(198,161,91,.78); color: #C6A15B; }
+#seed-help-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  width: 220px;
+  background: rgba(33,16,8,.97);
+  border: 1px solid rgba(198,161,91,.28);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: rgba(250,247,239,.82);
+  font-family: 'Nunito Sans', system-ui, sans-serif;
+  font-size: 12px; line-height: 1.65;
+  z-index: 9999;
+  opacity: 0; pointer-events: none;
+  transform: translateX(-50%) translateY(6px);
+  transition: opacity .22s, transform .22s;
+  box-shadow: 0 8px 28px rgba(0,0,0,.45);
+}
+#seed-help-tooltip.visible { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+.tip-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; color: #C6A15B; margin-bottom: 8px;
+}
+#seed-help-tooltip ol { list-style: decimal; padding-left: 16px; color: rgba(250,247,239,.72); }
+#seed-help-tooltip ol li { margin-bottom: 4px; }
+/* Semente flutuante */
+.floating-seed {
+  position: fixed;
+  z-index: 10001;
+  width: 26px; height: 26px;
+  cursor: grab;
+  user-select: none; -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+  touch-action: none;
+  filter: drop-shadow(0 3px 8px rgba(198,161,91,.65));
+  animation: seedFloat 2.2s ease-in-out infinite;
+}
+.floating-seed.dragging { cursor: grabbing; animation: none; }
+@keyframes seedFloat {
+  0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-8px) rotate(8deg)}
+}
+/* Anel de efeito no plantio */
+.plant-drop-ring {
+  position: absolute;
+  width: 30px; height: 30px;
+  margin-left: -15px; margin-top: -15px;
+  border-radius: 50%;
+  border: 2px solid rgba(198,161,91,.75);
+  pointer-events: none; z-index: 9995;
+  animation: ringPulse .8s ease-out forwards;
+}
+@keyframes ringPulse {
+  0%{transform:scale(.4);opacity:1} 100%{transform:scale(2.4);opacity:0}
+}
+/* Plantas plantadas pelo utilizador */
+.user-planted { position: absolute; z-index: 9997; pointer-events: auto; }
+.user-planted.ghost { opacity: 1 !important; }
+.user-planted .plant-slot { width: 44px; margin-left: -22px; }
+
 /* ─── 20. FLOATING ─── */
 .wa-float {
   position:fixed;bottom:32px;right:24px;z-index:9998;
@@ -907,7 +1024,9 @@ footer::before {
   .nav-links{display:none;}
   .hamburger{display:flex;}
   .insta-grid{grid-template-columns:repeat(3,1fr);}
-  .footer-grid{grid-template-columns:1fr;gap:28px;}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:20px 24px;}
+  .footer-grid .footer-brand{grid-column:1/-1;}
+  .footer-contato-col{grid-column:1/-1;}
   .form-row{grid-template-columns:1fr;}
   .form-card{padding:28px 20px;}
   #mobile-cta-bar{display:flex;}
@@ -932,6 +1051,8 @@ footer::before {
   .plant-point.nav-deco .plant-slot.wide { width: 30px; margin-left: -15px; }
   /* Performance: renderização lazy das seções fora do viewport */
   .section, .section-sm, .page-hero { content-visibility: auto; contain-intrinsic-size: 0 550px; }
+  /* Impede que plantas nas bordas causem scroll horizontal */
+  .plant-zone { overflow-x: clip; }
 }
 </style>
 
@@ -1007,7 +1128,11 @@ footer::before {
 }
 
 /* Pontos decorativos (nav/rodapé): não interferem em cliques */
+.plant-point .plant-slot { -webkit-tap-highlight-color: transparent; }
 .plant-point.deco .plant-slot { pointer-events: none; cursor: default; }
+/* Ghost: planta sobre área de texto — quase transparente, z-index baixo */
+.plant-point.ghost { z-index: 1; }
+.plant-point.ghost .plant-slot { opacity: 0.4; }
 .plant-point.nav-deco .plant-slot { width: 28px; margin-left: -14px; }
 /* Plantas com pata de pet (plant-2, plant-11, plant-22) precisam de slot mais largo */
 .plant-slot.wide { width: 72px; margin-left: -36px; }
@@ -2331,6 +2456,33 @@ footer::before {
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="6" stroke="#DFA5A0" stroke-width="1.2"/><path d="M11 5 C11 2 9 1 8 3 C10 4 10.5 5.5 11 5Z" fill="#DFA5A0" fill-opacity=".7"/><path d="M11 5 C11 2 13 1 14 3 C12 4 11.5 5.5 11 5Z" fill="#DFA5A0" fill-opacity=".6"/><circle cx="11" cy="5" r="1.2" fill="#C6A15B"/></svg>
           </div>
           <div class="footer-wm-text">ARIA<small>Instituto</small></div>
+          <div id="seed-bag-container">
+            <div id="seed-bag-btn" role="button" tabindex="0"
+                 aria-label="Clique duas vezes para pegar uma semente e plantá-la na página">
+              <svg id="seed-bag-svg" viewBox="0 -4 48 62" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M8 26 C5 52 24 58 24 58 C24 58 43 52 40 26 C40 16 33 13 24 13 C15 13 8 16 8 26Z" fill="#C6A15B" opacity=".85"/>
+                <path d="M13 33 Q24 30 35 33" stroke="#9A7535" stroke-width=".8" fill="none" opacity=".5"/>
+                <path d="M11 41 Q24 38 37 41" stroke="#9A7535" stroke-width=".8" fill="none" opacity=".5"/>
+                <path d="M13 49 Q24 47 35 49" stroke="#9A7535" stroke-width=".8" fill="none" opacity=".5"/>
+                <circle cx="24" cy="25" r="3" fill="#8B4A5E" opacity=".35"/>
+                <circle cx="17" cy="35" r="2" fill="#8B4A5E" opacity=".28"/>
+                <circle cx="31" cy="37" r="2" fill="#8B4A5E" opacity=".28"/>
+                <ellipse cx="24" cy="15" rx="8.5" ry="4" fill="#8B4A5E"/>
+                <path d="M24 11 Q22 4 16 0" stroke="#4A7A35" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+                <path d="M16 0 C8 -2 11 9 18 8 C19 4 16 0 16 0Z" fill="#5D8B3A"/>
+                <path d="M23 5 C27 1 32 6 28 10 C26 8 23 5 23 5Z" fill="#5D8B3A" opacity=".8"/>
+              </svg>
+            </div>
+            <button id="seed-help-btn" aria-label="Como usar o saco de sementes">?</button>
+            <div id="seed-help-tooltip" role="tooltip" aria-hidden="true">
+              <div class="tip-title">🌱 Plante uma semente</div>
+              <ol>
+                <li>Clique duas vezes no saco para pegar uma semente.</li>
+                <li>Arraste-a para qualquer local do site.</li>
+                <li>Clique duas vezes no local escolhido para plantar.</li>
+              </ol>
+            </div>
+          </div>
         </div>
         <p>Acolher para cuidar, cuidar para transformar. Uma organização dedicada ao desenvolvimento integral de pessoas e ao respeito pela vida animal.</p>
         <p class="footer-cnpj">CNPJ: 67.555.170/0001-03 · Marituba, Pará — Brasil</p>
@@ -2348,7 +2500,7 @@ footer::before {
       </div>
 
       <!-- Menu -->
-      <div class="footer-col">
+      <div class="footer-col footer-nav-col">
         <h5>Navegação</h5>
         <ul>
           <li><a href="#" onclick="showPage('home')" role="button" tabindex="0">Início</a></li>
@@ -2362,7 +2514,7 @@ footer::before {
       </div>
 
       <!-- Projetos -->
-      <div class="footer-col">
+      <div class="footer-col footer-projetos-col">
         <h5>Projetos</h5>
         <ul>
           <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Florescer</a></li>
@@ -2374,7 +2526,7 @@ footer::before {
       </div>
 
       <!-- Contato + newsletter -->
-      <div class="footer-col">
+      <div class="footer-col footer-contato-col">
         <h5>Contato</h5>
         <div class="footer-contact-item">
           <svg viewBox="0 0 16 16"><path d="M11 3C7.69 3 5 5.69 5 9c0 3 4 8 4 8s4-5 4-8c0-3.31-2.69-6-6-6z"/></svg>
@@ -2411,6 +2563,7 @@ footer::before {
   </div>
 </footer>
 
+
 <!-- ╔══════════════════════════════════╗ -->
 <!-- ║  FLOATING ELEMENTS              ║ -->
 <!-- ╚══════════════════════════════════╝ -->
@@ -2445,7 +2598,7 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = document.getElementById('page-' + id);
   if (target) target.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   closeMobile();
   updateActiveLink(id);
   setTimeout(() => { updateNavTop(); initFadeUp(); }, 60);
@@ -2499,6 +2652,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 1800);
   }
 });
+
+/* ─── SCROLL GUARD: reseta deslize horizontal residual após toque ─── */
+document.addEventListener('touchend', function() {
+  if (window.scrollX !== 0) window.scrollTo(0, window.scrollY);
+}, { passive: true });
 
 /* ─── FAQ ACORDEÃO ─── */
 function toggleFaq(btn) {
@@ -2691,40 +2849,10 @@ window.showPage = function(id) {
 
   var TOTAL_PLANTS    = 49;
   var WIDE_PLANTS     = [2, 4, 11, 12, 13, 20, 22]; // plantas com pata de pet / flores espremidas — slot mais largo
-  var POINTS_PER_PAGE = 30;
   var MIN_PLANTS      = 3;   // mínimo de plantas por página (cabeçalho → rodapé)
   var MAX_PLANTS      = 5;   // máximo de plantas por página
-  var MAX_ON_SCREEN   = 3;   // no máximo X plantas visíveis numa mesma tela
 
-  // ── 30 posições distribuídas uniformemente por toda a tela ───────────────
-  // Cobertura: borda esquerda, borda direita, centro-esquerda, centro, centro-direita
-  // Todas as posições são igualmente elegíveis — sem distinção safe/risky.
-  var POS_POOL = [
-    // Borda esquerda
-    {x:'2%',  y:'5%',  safe:true}, {x:'4%',  y:'18%', safe:true},
-    {x:'3%',  y:'32%', safe:true}, {x:'6%',  y:'46%', safe:true},
-    {x:'2%',  y:'60%', safe:true}, {x:'5%',  y:'74%', safe:true},
-    {x:'3%',  y:'88%', safe:true},
-    // Centro-esquerda
-    {x:'20%', y:'10%', safe:true}, {x:'22%', y:'28%', safe:true},
-    {x:'18%', y:'50%', safe:true}, {x:'24%', y:'68%', safe:true},
-    {x:'19%', y:'84%', safe:true},
-    // Centro
-    {x:'38%', y:'15%', safe:true}, {x:'50%', y:'8%',  safe:true},
-    {x:'42%', y:'38%', safe:true}, {x:'55%', y:'55%', safe:true},
-    {x:'47%', y:'72%', safe:true}, {x:'52%', y:'90%', safe:true},
-    // Centro-direita
-    {x:'72%', y:'22%', safe:true}, {x:'76%', y:'40%', safe:true},
-    {x:'68%', y:'58%', safe:true}, {x:'74%', y:'76%', safe:true},
-    {x:'78%', y:'92%', safe:true},
-    // Borda direita
-    {x:'92%', y:'6%',  safe:true}, {x:'96%', y:'20%', safe:true},
-    {x:'94%', y:'35%', safe:true}, {x:'90%', y:'52%', safe:true},
-    {x:'95%', y:'66%', safe:true}, {x:'91%', y:'80%', safe:true},
-    {x:'97%', y:'94%', safe:true}
-  ]; // 30 posições · cobertura uniforme · toda a largura
-
-  // ── Distribuição enviesada para 3..5 plantas, com viés para o mínimo ──────
+  // ── Âncoras de posicionamento seguro (Zonas Permitidas) ───────────────────
   var W = [45, 35, 20]; // pesos para 3, 4 e 5 plantas
   var W_CUM = (function () {
     var c = [], s = 0;
@@ -2756,23 +2884,30 @@ window.showPage = function(id) {
   function makeDraggable(anchor, slot, svg, zone) {
 
     function startDrag(startX, startY) {
-      var origLeft = parseFloat(anchor.style.left) || 0;
-      var origTop  = parseFloat(anchor.style.top)  || 0;
-      var isDrag   = false;
+      var isDrag = false;
+      // Captura posição inicial do anchor no viewport
+      var initRect = anchor.getBoundingClientRect();
+      var fixedLeft = initRect.left;
+      var fixedTop  = initRect.top;
 
       function move(cx, cy) {
-        var zr = zone.getBoundingClientRect();
         var dx = cx - startX;
         var dy = cy - startY;
-        if (!isDrag && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+        if (!isDrag && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
           isDrag = true;
           anchor.classList.add('dragging');
+          // Eleva para o body com position:fixed, posicionado no viewport
+          anchor.style.position = 'fixed';
+          anchor.style.left     = fixedLeft + 'px';
+          anchor.style.top      = fixedTop  + 'px';
+          anchor.style.zIndex   = '9998';
+          anchor.style.width    = '';
+          anchor.style.margin   = '0';
+          document.body.appendChild(anchor);
         }
         if (!isDrag) return;
-        var nl = Math.max(1, Math.min(96, origLeft + dx / zr.width  * 100));
-        var nt = Math.max(1, Math.min(96, origTop  + dy / zr.height * 100));
-        anchor.style.left = nl + '%';
-        anchor.style.top  = nt + '%';
+        anchor.style.left = (fixedLeft + dx) + 'px';
+        anchor.style.top  = (fixedTop  + dy) + 'px';
       }
 
       function end() {
@@ -2781,16 +2916,27 @@ window.showPage = function(id) {
         document.removeEventListener('touchmove', onTM);
         document.removeEventListener('touchend',  onTE);
         anchor.classList.remove('dragging');
-        if (!isDrag) { // click simples → animação shake
+        if (!isDrag) {
+          // Click simples → animação shake
           svg.classList.remove('clicked');
           void svg.offsetWidth;
           svg.classList.add('clicked');
+        } else {
+          // Converte de fixed → absolute em body (planta fica no lugar do drop)
+          var finalLeft = parseFloat(anchor.style.left) + window.scrollX;
+          var finalTop  = parseFloat(anchor.style.top)  + window.scrollY;
+          anchor.style.position = 'absolute';
+          anchor.style.left     = finalLeft + 'px';
+          anchor.style.top      = finalTop  + 'px';
+          anchor.style.zIndex   = '9997';
+          // Remove ghost se estava fantasmado — usuário decidiu onde quer
+          anchor.classList.remove('ghost');
         }
       }
 
       function onMM(e) { move(e.clientX, e.clientY); }
       function onMU()  { end(); }
-      function onTM(e) { e.preventDefault(); var t = e.touches[0]; move(t.clientX, t.clientY); }
+      function onTM(e) { var t = e.touches[0]; move(t.clientX, t.clientY); if (isDrag) e.preventDefault(); }
       function onTE()  { end(); }
 
       document.addEventListener('mousemove', onMM);
@@ -2809,13 +2955,13 @@ window.showPage = function(id) {
     }, { passive: true });
   }
 
-  // ── Planta uma flor numa zona, numa posição (x%,y%) ───────────────────────
-  function plantAt(zoneEl, xPct, yPct, plantId, allowDrag, eligibleForGiant) {
+  // ── Planta uma flor numa zona, numa posição pré-aprovada (âncora) ─────────
+  function plantAt(zoneEl, xPct, yPct, plantId, allowDrag, eligibleForGiant, isGhost) {
     var symbol = document.getElementById('plant-' + plantId);
     if (!symbol) return;
 
     var anchor = document.createElement('div');
-    anchor.className = 'plant-point' + (allowDrag ? '' : ' deco');
+    anchor.className = 'plant-point' + (allowDrag ? '' : ' deco') + (isGhost ? ' ghost' : '');
     anchor.style.left = xPct;
     anchor.style.top  = yPct;
 
@@ -2847,155 +2993,136 @@ window.showPage = function(id) {
     if (allowDrag) makeDraggable(anchor, slot, svg, zoneEl);
   }
 
-  // ── Filtra candidatos garantindo distância mínima em pixels ───────────────
-  // Se após o filtro o número cair abaixo de minCount, reaplica com distância
-  // progressivamente menor até garantir o mínimo.
-  function filterByMinDistance(points, minDist, minCount) {
-    function applyFilter(pts, dist) {
-      var sorted = pts.slice().sort(function (a, b) { return a.absY - b.absY; });
-      var kept = [];
-      var lastY = -Infinity;
-      sorted.forEach(function (p) {
-        if (p.absY - lastY >= dist) { kept.push(p); lastY = p.absY; }
-      });
-      return kept;
-    }
-    // Tenta com distância original; se ficar curto, reduz pela metade até 3 tentativas
-    var result = applyFilter(points, minDist);
-    if (result.length < minCount && minDist > 10) {
-      result = applyFilter(points, minDist / 2);
-    }
-    if (result.length < minCount && minDist > 20) {
-      result = applyFilter(points, minDist / 4);
-    }
-    // Se ainda curto, pega os primeiros do pool original sem filtro de distância
-    if (result.length < minCount) {
-      result = points.slice(0, minCount);
-    }
-    return result;
-  }
+  // ── Âncoras de posicionamento seguro (Zonas Permitidas) ───────────────────
+    // Em vez de sortear aleatoriamente e calcular colisão com texto, usamos
+    // posições pré-aprovadas (âncoras) baseadas na geometria do layout.
+    // As laterais usam calc(50% ± 620px) para ficarem exatamente nas margens
+    // em telas grandes, e naturalmente fora da tela em telas pequenas.
+    var ANCHOR_POOL_DESKTOP = [
+      // ── Margens laterais (12) — fora do container · opacidade 1 ──
+      { x: 'calc(50% - 620px)', y: '15%', textSafe: true },
+      { x: 'calc(50% - 620px)', y: '30%', textSafe: true },
+      { x: 'calc(50% - 620px)', y: '45%', textSafe: true },
+      { x: 'calc(50% - 620px)', y: '60%', textSafe: true },
+      { x: 'calc(50% - 620px)', y: '75%', textSafe: true },
+      { x: 'calc(50% - 620px)', y: '88%', textSafe: true },
+      { x: 'calc(50% + 620px)', y: '15%', textSafe: true },
+      { x: 'calc(50% + 620px)', y: '30%', textSafe: true },
+      { x: 'calc(50% + 620px)', y: '45%', textSafe: true },
+      { x: 'calc(50% + 620px)', y: '60%', textSafe: true },
+      { x: 'calc(50% + 620px)', y: '75%', textSafe: true },
+      { x: 'calc(50% + 620px)', y: '88%', textSafe: true },
+      // ── Interior (12) — sobre conteúdo · ghost 60% transparente ──
+      { x: '22%', y: '20%', textSafe: false },
+      { x: '22%', y: '50%', textSafe: false },
+      { x: '22%', y: '80%', textSafe: false },
+      { x: '38%', y: '20%', textSafe: false },
+      { x: '38%', y: '50%', textSafe: false },
+      { x: '38%', y: '80%', textSafe: false },
+      { x: '62%', y: '20%', textSafe: false },
+      { x: '62%', y: '50%', textSafe: false },
+      { x: '62%', y: '80%', textSafe: false },
+      { x: '78%', y: '20%', textSafe: false },
+      { x: '78%', y: '50%', textSafe: false },
+      { x: '78%', y: '80%', textSafe: false },
+    ];
 
-  // ── Gera plantas para um conjunto de zonas (uma página, ou nav/rodapé) ────
-  // Regras de distribuição:
-  //   · no máximo 2 plantas nos primeiros 40% da página
-  //   · no máximo 3 plantas nos primeiros 60% da página
-  //   · o restante fica livre nos últimos 40%
-  function buildGarden(zones, rand, opts) {
-    zones = Array.prototype.filter.call(zones, function (z) { return !!z; });
-    if (!zones.length) return;
-    opts = opts || {};
-    var allowDrag  = opts.allowDrag !== false;
-    var minCount   = opts.minCount || MIN_PLANTS;
-    var maxCount   = opts.maxCount || MAX_PLANTS;
-    var zoneCount  = zones.length;
+    // Mobile: 4 posições por lado com opacidade 1 (padding das seções) +
+    // 8 posições interiores ghost (60% transparente)
+    var ANCHOR_POOL_MOBILE = [
+      // ── Laterais (8) — dentro do padding superior e inferior · opacidade 1 ──
+      { x: '5%',  y: '4%',  textSafe: true },
+      { x: '5%',  y: '11%', textSafe: true },
+      { x: '5%',  y: '88%', textSafe: true },
+      { x: '5%',  y: '94%', textSafe: true },
+      { x: '94%', y: '4%',  textSafe: true },
+      { x: '94%', y: '11%', textSafe: true },
+      { x: '94%', y: '88%', textSafe: true },
+      { x: '94%', y: '94%', textSafe: true },
+      // ── Interior (8) — sobre conteúdo · ghost 60% transparente ──
+      { x: '25%', y: '20%', textSafe: false },
+      { x: '25%', y: '55%', textSafe: false },
+      { x: '25%', y: '78%', textSafe: false },
+      { x: '50%', y: '30%', textSafe: false },
+      { x: '50%', y: '65%', textSafe: false },
+      { x: '75%', y: '20%', textSafe: false },
+      { x: '75%', y: '55%', textSafe: false },
+      { x: '75%', y: '78%', textSafe: false },
+    ];
 
-    var ALL_POINTS = [];
-    zones.forEach(function (zoneEl, zi) {
-      var rect    = zoneEl.getBoundingClientRect();
-      var zoneTop = rect.top + window.scrollY;
-      var zoneH   = rect.height || 1;
-      for (var k = zi; k < POINTS_PER_PAGE; k += zoneCount) {
-        var pos  = POS_POOL[k];
-        var yVal = parseFloat(pos.y) / 100;
-        ALL_POINTS.push({
-          zone: zoneEl, x: pos.x, y: pos.y, safe: pos.safe,
-          absY: zoneTop + zoneH * yVal,
-          yPct: yVal * 100  // percentual Y dentro da página (0–100)
+    // ── Gera plantas para um conjunto de zonas usando apenas âncoras ──────────
+    function buildGarden(zones, rand, opts) {
+      zones = Array.prototype.filter.call(zones, function (z) { return !!z; });
+      if (!zones.length) return;
+      opts = opts || {};
+      var allowDrag      = opts.allowDrag !== false;
+      var eligibleForGiant = !!opts.eligibleForGiant;
+
+      var isMobile = window.innerWidth < 1100;
+      var pool = isMobile ? ANCHOR_POOL_MOBILE : ANCHOR_POOL_DESKTOP;
+
+      // Separa pool em lateral (opacidade 1) e interior (ghost)
+      var lateralPts = [];
+      var interiorPts = [];
+      zones.forEach(function (zoneEl) {
+        pool.forEach(function (anchor) {
+          var pt = { zone: zoneEl, x: anchor.x, y: anchor.y, textSafe: anchor.textSafe !== false };
+          if (pt.textSafe) lateralPts.push(pt);
+          else             interiorPts.push(pt);
         });
-      }
-    });
-
-    var activeCount = Math.min(maxCount, Math.max(minCount, skewedCount(rand)));
-
-    // Todas as posições são igualmente elegíveis — distribuição uniforme por toda a tela
-    var shuffled = ALL_POINTS.slice().sort(function () { return rand() - 0.5; });
-    var candidates = shuffled.slice(0, activeCount * 4); // pool maior para ter opções
-
-    // distância mínima: garante no máximo MAX_ON_SCREEN plantas visíveis por tela
-    var vh = window.innerHeight || 800;
-    var minDist = vh / (MAX_ON_SCREEN + 0.5);
-    var filtered = filterByMinDistance(candidates, minDist, minCount);
-
-    // ── Aplica restrições de zona vertical ───────────────────────────────────
-    // Reconstrói a seleção final respeitando:
-    //   ≤ 2 plantas com yPct < 40
-    //   ≤ 3 plantas com yPct < 60
-    // Se os candidatos filtrados já violam, redistribui.
-    function applyZoneLimits(pool, count) {
-      // Separa em 3 bandas: topo (0-40%), meio (40-60%), fundo (60-100%)
-      var top   = pool.filter(function(p){ return p.yPct < 40; });
-      var mid   = pool.filter(function(p){ return p.yPct >= 40 && p.yPct < 60; });
-      var bot   = pool.filter(function(p){ return p.yPct >= 60; });
-
-      var result = [];
-      var usedTop = 0; // plantas em 0–40%
-      var usedMid = 0; // plantas em 40–60% (conta junto com top para o limite de 60%)
-
-      // Primeiro, preenche com plantas do fundo (sem restrição)
-      bot.forEach(function(p) {
-        if (result.length < count) { result.push(p); }
       });
 
-      // Depois, adiciona do meio respeitando: top+mid ≤ 3
-      mid.forEach(function(p) {
-        if (result.length >= count) return;
-        if (usedTop + usedMid < 3) { result.push(p); usedMid++; }
-      });
+      // Contagens separadas por lado/interior; ajustadas por dispositivo
+      var minLat = isMobile ? 3 : 4;
+      var maxLat = isMobile ? 5 : 6;
+      var minInt = isMobile ? 2 : 4;
+      var maxInt = isMobile ? 4 : 6;
 
-      // Por fim, adiciona do topo respeitando: top ≤ 2 e top+mid ≤ 3
-      top.forEach(function(p) {
-        if (result.length >= count) return;
-        if (usedTop < 2 && usedTop + usedMid < 3) { result.push(p); usedTop++; }
-      });
-
-      // Se ainda falta, completa com o que tiver (relaxa restrições, mas tenta mínimo)
-      if (result.length < minCount) {
-        pool.forEach(function(p) {
-          if (result.indexOf(p) === -1 && result.length < minCount) {
-            result.push(p);
-          }
-        });
+      function pickFrom(pool, minC, maxC) {
+        var count = minC + Math.floor(rand() * (maxC - minC + 1));
+        count = Math.min(count, pool.length);
+        var shuffled = pool.slice().sort(function () { return rand() - 0.5; });
+        return shuffled.slice(0, count);
       }
 
-      return result;
+      var active = pickFrom(lateralPts, minLat, maxLat).concat(pickFrom(interiorPts, minInt, maxInt));
+
+      active.forEach(function (point) {
+        var plantId = 1 + Math.floor(rand() * TOTAL_PLANTS);
+        var giantOk = eligibleForGiant && isGiantEligible(point.zone);
+        plantAt(point.zone, point.x, point.y, plantId, allowDrag, giantOk, !point.textSafe);
+      });
     }
-
-    var active = applyZoneLimits(filtered, activeCount);
-    var eligibleForGiant = !!opts.eligibleForGiant;
-
-    active.forEach(function (point) {
-      var plantId = 1 + Math.floor(rand() * TOTAL_PLANTS);
-      plantAt(point.zone, point.x, point.y, plantId, allowDrag, eligibleForGiant);
-    });
-  }
 
   var baseSeed = getTimeSeed();
 
   // ── Sorteio global de plantas "gigantes" (dobro do tamanho mínimo) ────────
-  // Apenas entre as plantas normais do jardim de cada página (não nav, não
-  // rodapé, não zonas sway-slow). Usa reservoir sampling (algoritmo R) porque
-  // o total de plantas só é conhecido conforme as páginas são construídas
-  // (construção é lazy, sob demanda). Isso garante que, no fim, exatamente
-  // GIANT_COUNT plantas (1 ou 2, sorteado) tenham sido escolhidas de forma
-  // uniforme entre todas as já plantadas até o momento.
   var giantRand    = mulberry32(baseSeed * 131 + 11);
   var GIANT_COUNT  = giantRand() < 0.5 ? 1 : 2;
-  var GIANT_SCALE  = window.innerWidth < 768 ? '1.00' : '2.00'; // dobro no desktop; sem giant no mobile
-  var giantSeen    = 0;      // total de plantas elegíveis já vistas no fluxo
-  var giantReservoir = [];   // até GIANT_COUNT elementos <svg> escolhidos
+  var GIANT_SCALE  = window.innerWidth < 768 ? '1.00' : '2.00';
+  var giantSeen    = 0;
+  var giantReservoir = [];
 
-  // Chamado para cada planta elegível recém-criada (svg do plant-graphic).
+  // ── Restrição: plantas gigantes só abaixo de "Nossa história" ─────────────
+  var _nossaHistSect = null;
+  function isGiantEligible(zoneEl) {
+    if (!_nossaHistSect) {
+      var h = document.getElementById('home-sobre-h');
+      _nossaHistSect = h ? h.closest('section') : null;
+    }
+    if (!_nossaHistSect) return true;
+    return !!(_nossaHistSect.compareDocumentPosition(zoneEl) & 4);
+  }
+
   function considerForGiant(svgEl) {
     giantSeen++;
     if (giantReservoir.length < GIANT_COUNT) {
       giantReservoir.push(svgEl);
       svgEl.style.setProperty('--size-scale', GIANT_SCALE);
     } else {
-      // Substitui um dos escolhidos com probabilidade GIANT_COUNT/giantSeen
       var j = Math.floor(giantRand() * giantSeen);
       if (j < GIANT_COUNT) {
         var old = giantReservoir[j];
-        // Devolve ao antigo escolhido seu tamanho normal (sorteio próprio)
         old.style.setProperty('--size-scale', (1.0 + Math.random() * 0.25).toFixed(2));
         giantReservoir[j] = svgEl;
         svgEl.style.setProperty('--size-scale', GIANT_SCALE);
@@ -3003,14 +3130,14 @@ window.showPage = function(id) {
     }
   }
 
-  // ── Constrói o jardim de uma página específica (lazy: só quando visível) ──
+  // ── Constrói o jardim de uma página específica (lazy) ────────────────────
   function buildPageGarden(pageEl, pi) {
     if (!pageEl || pageEl.dataset.gardenBuilt) return;
     var zones = pageEl.querySelectorAll('.plant-zone');
     if (!zones.length) return;
     pageEl.dataset.gardenBuilt = '1';
     var rand = mulberry32(baseSeed * 97 + pi * 31);
-    buildGarden(zones, rand, { minCount: MIN_PLANTS, maxCount: MAX_PLANTS, allowDrag: true, eligibleForGiant: true });
+    buildGarden(zones, rand, { allowDrag: true, eligibleForGiant: true });
   }
 
   function buildAllVisiblePages() {
@@ -3019,152 +3146,269 @@ window.showPage = function(id) {
     });
   }
 
-  // ── Constrói o jardim do rodapé (até 2 plantas, distância mínima própria) ─
-  function buildFooterGarden() {
-    var footer = document.querySelector('.footer-zone');
-    if (!footer || footer.dataset.gardenBuilt) return;
-    footer.dataset.gardenBuilt = '1';
-    var rand = mulberry32(baseSeed * 17 + 3);
-    // Posições exclusivas com y alto: a planta nasce de baixo e fica
-    // totalmente dentro do rodapé (overflow:hidden), sem vazar para cima.
-    var FOOTER_POS = [
-      {x:'3%',  y:'72%'}, {x:'7%',  y:'82%'}, {x:'5%',  y:'90%'},
-      {x:'93%', y:'74%'}, {x:'96%', y:'84%'}, {x:'94%', y:'92%'}
-    ];
-    var count = rand() < 0.5 ? 1 : 2;
-    var used = [];
-    for (var i = 0; i < count; i++) {
-      var idx;
-      do { idx = Math.floor(rand() * FOOTER_POS.length); } while (used.indexOf(idx) !== -1);
-      used.push(idx);
-      var pos = FOOTER_POS[idx];
-      var plantId = 1 + Math.floor(rand() * TOTAL_PLANTS);
-      plantAt(footer, pos.x, pos.y, plantId, true);
-    }
-  }
-
-  function initGarden() {
-    buildAllVisiblePages();
-    buildFooterGarden();
-  }
-
-  var _runGarden = function() {
-    if (window.requestIdleCallback) requestIdleCallback(initGarden, {timeout: 500});
-    else setTimeout(initGarden, 50);
-  };
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    _runGarden();
-  } else {
-    document.addEventListener('DOMContentLoaded', _runGarden);
-  }
-
-  // Ao trocar de página, garante o jardim da página recém-ativada e
-  // reavalia visibilidade para disparar a animação de nascimento.
-  window.recheckPlantPoints = function () {
-    buildAllVisiblePages();
-    document.querySelectorAll('.plant-point').forEach(function (el) {
-      observer.observe(el);
-    });
-  };
-
-  // ── Jardim especial: zonas sway-slow (overlay, hero, seção sobre) ─────────
-  // Usa o mesmo sistema de plant-point/plant-slot/makeDraggable do jardim,
-  // com símbolo próprio de cada zona. Reposiciona a cada 20 min.
-
-  var SWAY_SLOW_POSITIONS = {
-    'sway-slow-zone-1': [
-      {x:'15%',y:'15%'},{x:'82%',y:'20%'},{x:'12%',y:'75%'},
-      {x:'80%',y:'80%'},{x:'50%',y:'10%'},{x:'50%',y:'85%'}
-    ],
-    'sway-slow-zone-2': [
-      {x:'20%',y:'20%'},{x:'75%',y:'15%'},{x:'15%',y:'70%'},
-      {x:'80%',y:'65%'},{x:'50%',y:'40%'},{x:'30%',y:'80%'}
-    ],
-    'sway-slow-zone-3': [
-      {x:'20%',y:'20%'},{x:'75%',y:'20%'},{x:'20%',y:'75%'},
-      {x:'75%',y:'75%'},{x:'50%',y:'10%'},{x:'50%',y:'90%'}
-    ]
-  };
-  var swaySlowIdxMap = {};
-
+  // ── Sway-slow decorativas ─────────────────────────────────────────────────
   function buildSwaySlowZone(zoneEl) {
     if (!zoneEl) return;
-    var zid = zoneEl.id;
-    var positions = SWAY_SLOW_POSITIONS[zid];
-    if (!positions) return;
-    var symId = zoneEl.dataset.plantSym;
-    if (!document.getElementById(symId)) return;
-
-    // Limpa plantas anteriores (para reposicionamento)
-    zoneEl.querySelectorAll('.plant-point').forEach(function(el){ el.remove(); });
-
-    var currentIdx = swaySlowIdxMap[zid] || 0;
-    // Escolhe próxima posição diferente da atual
-    var nextIdx = Math.floor(Math.random() * (positions.length - 1));
-    if (nextIdx >= currentIdx) nextIdx++;
-    nextIdx = nextIdx % positions.length;
-    swaySlowIdxMap[zid] = nextIdx;
-    var pos = positions[nextIdx];
-
-    // Cria anchor (plant-point)
-    var anchor = document.createElement('div');
-    anchor.className = 'plant-point';
-    anchor.style.left = pos.x;
-    anchor.style.top  = pos.y;
-
-    var slot = document.createElement('div');
-    slot.className = 'plant-slot';
-    // Tamanho maior para as slow (são decorativas grandes)
-    slot.style.width = '60px';
-    slot.style.marginLeft = '-30px';
-
-    var svgNS = 'http://www.w3.org/2000/svg';
-    var svgEl = document.createElementNS(svgNS, 'svg');
-    svgEl.classList.add('plant-graphic');
-    svgEl.style.setProperty('--sway-dur',   (5 + Math.random() * 3).toFixed(2) + 's');
-    svgEl.style.setProperty('--sway-delay', (Math.random() * 2).toFixed(2) + 's');
-    svgEl.style.setProperty('--size-scale', (1.0 + Math.random() * 0.25).toFixed(2)); // original até 25% maior
-    var sym = document.getElementById(symId);
-    svgEl.setAttribute('viewBox', sym.getAttribute('viewBox'));
-
-    var use = document.createElementNS(svgNS, 'use');
-    use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#' + symId);
-    svgEl.appendChild(use);
-    slot.appendChild(svgEl);
-    anchor.appendChild(slot);
-    zoneEl.appendChild(anchor);
-
-    anchor._plantSvg = svgEl;
-    observer.observe(anchor);
-    makeDraggable(anchor, slot, svgEl, zoneEl);
+    zoneEl.querySelectorAll('.plant-point').forEach(function(p) {
+      if (p.parentNode) p.parentNode.removeChild(p);
+    });
+    var rand = mulberry32(baseSeed * 53 + getTimeSeed() * 7);
+    var pid  = 1 + Math.floor(rand() * TOTAL_PLANTS);
+    plantAt(zoneEl, '50%', '55%', pid, false, false, false);
   }
 
-  function initSwaySlowZones() {
+  // ── Inicialização ─────────────────────────────────────────────────────────
+  function initGarden() {
+    buildAllVisiblePages();
+    window.recheckPlantPoints = buildAllVisiblePages;
     document.querySelectorAll('.sway-slow-zone').forEach(function(z) {
-      buildSwaySlowZone(z);
+      setTimeout(function(){ buildSwaySlowZone(z); }, 650);
     });
   }
 
-  // Aguarda DOM pronto
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    setTimeout(initSwaySlowZones, 50);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initGarden);
+  } else if (typeof requestIdleCallback !== 'undefined') {
+    requestIdleCallback(initGarden);
   } else {
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initSwaySlowZones, 50); });
+    setTimeout(initGarden, 80);
   }
 
-  // Reposiciona as zonas sway-slow a cada 20 minutos
-  setInterval(function () {
+  // ── Timer 20 min: renova sway-slow ───────────────────────────────────────
+  setInterval(function() {
     document.querySelectorAll('.sway-slow-zone').forEach(function(z) {
-      // Anima saída da planta atual antes de replantar
-      var existing = z.querySelector('.plant-graphic.born');
-      if (existing) {
-        existing.style.transition = 'transform 0.6s ease-in, opacity 0.5s ease-in';
-        existing.style.transform  = 'scaleY(0) rotate(8deg)';
-        existing.style.opacity    = '0';
-      }
+      z.querySelectorAll('.plant-point').forEach(function(p) {
+        if (p.parentNode) p.parentNode.removeChild(p);
+      });
       setTimeout(function(){ buildSwaySlowZone(z); }, 650);
     });
   }, 20 * 60 * 1000);
+
+  // ── Saco de Sementes: sistema de plantio pelo usuário ─────────────────────
+  (function initSeedBag() {
+    var container = document.getElementById('seed-bag-container');
+    var btn       = document.getElementById('seed-bag-btn');
+    var helpBtn   = document.getElementById('seed-help-btn');
+    var tooltip   = document.getElementById('seed-help-tooltip');
+    if (!btn) return;
+
+    var activeSeed  = null;
+    var DBLCLICK_MS = 320;
+
+    // ── Tooltip de ajuda ─────────────────────────────────────────────
+    if (helpBtn) {
+      helpBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var vis = tooltip.classList.toggle('visible');
+        tooltip.setAttribute('aria-hidden', vis ? 'false' : 'true');
+      });
+      document.addEventListener('click', function(e) {
+        if (container && !container.contains(e.target)) {
+          tooltip.classList.remove('visible');
+          tooltip.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    // ── Duplo clique/toque no saco → libera semente ──────────────────
+    var bagLastClick = 0;
+    function onBagActivate(e) {
+      e.stopPropagation();
+      var now = Date.now();
+      if (now - bagLastClick < DBLCLICK_MS) {
+        bagLastClick = 0;
+        activeSeed ? removeSeed() : spawnSeed();
+      } else {
+        bagLastClick = now;
+      }
+    }
+    btn.addEventListener('click', onBagActivate);
+    btn.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      onBagActivate(e);
+    }, { passive: false });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && activeSeed) removeSeed();
+    });
+
+    // ── Cria a semente flutuante ─────────────────────────────────────
+    function spawnSeed() {
+      btn.classList.remove('glowing');
+      void btn.offsetWidth;
+      btn.classList.add('glowing');
+      btn.addEventListener('animationend', function() {
+        btn.classList.remove('glowing');
+      }, { once: true });
+
+      var seedEl = document.createElement('div');
+      seedEl.className = 'floating-seed';
+      seedEl.innerHTML =
+        '<svg viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">' +
+          '<ellipse cx="14" cy="17" rx="8" ry="9.5" fill="#C6A15B"/>' +
+          '<ellipse cx="14" cy="17" rx="5" ry="6.5" fill="#9A7535" opacity=".42"/>' +
+          '<path d="M14 8 Q12 3 10 1 Q13 4 14 8Z" fill="#5D8B3A"/>' +
+          '<path d="M14 8 Q16 3 18 1 Q15 4 14 8Z" fill="#5D8B3A" opacity=".8"/>' +
+        '</svg>';
+
+      var bRect = btn.getBoundingClientRect();
+      seedEl.style.left = Math.max(4, bRect.left - 44) + 'px';
+      seedEl.style.top  = (bRect.top + bRect.height / 2 - 13) + 'px';
+      document.body.appendChild(seedEl);
+      activeSeed = seedEl;
+      makeSeedDraggable(seedEl);
+    }
+
+    function removeSeed() {
+      if (activeSeed && activeSeed.parentNode) activeSeed.parentNode.removeChild(activeSeed);
+      activeSeed = null;
+    }
+
+    // ── Arrastar a semente ───────────────────────────────────────────
+    function makeSeedDraggable(seedEl) {
+      var sx, sy, initLeft, initTop, isDragging;
+      var seedLastTap = 0;
+
+      function onSeedStart(cx, cy) {
+        isDragging = false;
+        sx = cx; sy = cy;
+        initLeft = parseFloat(seedEl.style.left);
+        initTop  = parseFloat(seedEl.style.top);
+      }
+
+      function onSeedMove(cx, cy) {
+        var dx = cx - sx, dy = cy - sy;
+        if (!isDragging && (Math.abs(dx) > 4 || Math.abs(dy) > 4)) {
+          isDragging = true;
+          seedEl.classList.add('dragging');
+        }
+        if (!isDragging) return;
+        seedEl.style.left = (initLeft + dx) + 'px';
+        seedEl.style.top  = (initTop  + dy) + 'px';
+      }
+
+      function onSeedEnd() {
+        document.removeEventListener('mousemove', onMM);
+        document.removeEventListener('mouseup',   onMU);
+        document.removeEventListener('touchmove', onTM);
+        document.removeEventListener('touchend',  onTE);
+        seedEl.classList.remove('dragging');
+        if (!isDragging) {
+          var now = Date.now();
+          if (now - seedLastTap < DBLCLICK_MS) {
+            seedLastTap = 0;
+            var r = seedEl.getBoundingClientRect();
+            triggerPlantAnim(r.left + r.width/2, r.top + r.height/2,
+                             r.left + r.width/2 + window.scrollX,
+                             r.top  + r.height/2 + window.scrollY);
+          } else { seedLastTap = now; }
+        }
+      }
+
+      function onMM(e) { onSeedMove(e.clientX, e.clientY); }
+      function onMU()  { onSeedEnd(); }
+      function onTM(e) { e.preventDefault(); onSeedMove(e.touches[0].clientX, e.touches[0].clientY); }
+      function onTE()  { onSeedEnd(); }
+
+      seedEl.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        onSeedStart(e.clientX, e.clientY);
+        document.addEventListener('mousemove', onMM);
+        document.addEventListener('mouseup', onMU);
+      });
+      seedEl.addEventListener('touchstart', function(e) {
+        onSeedStart(e.touches[0].clientX, e.touches[0].clientY);
+        document.addEventListener('touchmove', onTM, { passive: false });
+        document.addEventListener('touchend', onTE);
+      }, { passive: true });
+    }
+
+    // ── Duplo clique/toque em qualquer lugar para plantar ────────────
+    var docLastTap = 0;
+    document.addEventListener('dblclick', function(e) {
+      if (!activeSeed) return;
+      if (container && container.contains(e.target)) return;
+      triggerPlantAnim(e.clientX, e.clientY,
+                       e.clientX + window.scrollX, e.clientY + window.scrollY);
+    });
+    document.addEventListener('touchend', function(e) {
+      if (!activeSeed) return;
+      if (container && container.contains(e.target)) return;
+      var now = Date.now();
+      var t = e.changedTouches[0];
+      if (now - docLastTap < DBLCLICK_MS) {
+        docLastTap = 0;
+        e.preventDefault();
+        triggerPlantAnim(t.clientX, t.clientY,
+                         t.clientX + window.scrollX, t.clientY + window.scrollY);
+      } else { docLastTap = now; }
+    }, { passive: false });
+
+    // ── Animação de plantio: semente desce, flor nasce ───────────────
+    function triggerPlantAnim(vx, vy, absX, absY) {
+      if (!activeSeed) return;
+      var captured = activeSeed;
+      activeSeed = null; // zera imediatamente — bloqueia chamadas duplicadas
+
+      captured.style.left       = (vx - 13) + 'px';
+      captured.style.top        = (vy - 13) + 'px';
+      captured.style.animation  = 'none';
+      captured.style.transition = 'transform .32s ease-in, opacity .32s ease-in';
+      captured.style.transform  = 'scale(0.15) translateY(14px)';
+      captured.style.opacity    = '0';
+
+      var ring = document.createElement('div');
+      ring.className      = 'plant-drop-ring';
+      ring.style.position = 'absolute';
+      ring.style.left     = absX + 'px';
+      ring.style.top      = absY + 'px';
+      document.body.appendChild(ring);
+      setTimeout(function() { if (ring.parentNode) ring.parentNode.removeChild(ring); }, 900);
+
+      setTimeout(function() {
+        if (captured && captured.parentNode) captured.parentNode.removeChild(captured);
+        plantUserFlower(absX, absY);
+      }, 360);
+    }
+
+    // ── Faz nascer uma flor aleatória ────────────────────────────────
+    function plantUserFlower(absX, absY) {
+      var plantId = 1 + Math.floor(Math.random() * TOTAL_PLANTS);
+      var symbol  = document.getElementById('plant-' + plantId);
+      if (!symbol) return;
+
+      var anchor = document.createElement('div');
+      anchor.className      = 'plant-point user-planted';
+      anchor.style.position = 'absolute';
+      anchor.style.left     = absX + 'px';
+      anchor.style.top      = absY + 'px';
+      anchor.style.zIndex   = '9997';
+
+      var slot = document.createElement('div');
+      slot.className = 'plant-slot' + (WIDE_PLANTS.indexOf(plantId) !== -1 ? ' wide' : '');
+
+      var svgNS = 'http://www.w3.org/2000/svg';
+      var svg   = document.createElementNS(svgNS, 'svg');
+      svg.classList.add('plant-graphic');
+      svg.style.setProperty('--sway-dur',   (3.2 + Math.random() * 2.2).toFixed(2) + 's');
+      svg.style.setProperty('--sway-delay', '0s');
+      svg.style.setProperty('--size-scale', (0.85 + Math.random() * 0.75).toFixed(2));
+      svg.setAttribute('viewBox', symbol.getAttribute('viewBox'));
+
+      var use = document.createElementNS(svgNS, 'use');
+      use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#plant-' + plantId);
+      svg.appendChild(use);
+      slot.appendChild(svg);
+      anchor.appendChild(slot);
+      document.body.appendChild(anchor);
+
+      // .born vai no SVG (.plant-graphic), não no anchor (.plant-point)
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { svg.classList.add('born'); });
+      });
+      makeDraggable(anchor, slot, svg, document.body);
+    }
+  })();
 
 })();
 </script>
