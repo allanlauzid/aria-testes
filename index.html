@@ -61,7 +61,7 @@
 
 /* ─── 2. RESET ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; }
+html { font-size: 16px; overflow-x: clip; } /* clip no html: propaga ao viewport sem criar BFC nem travar scroll vertical */
 body {
   font-family: 'Nunito Sans', system-ui, sans-serif;
   background: var(--aria-cream);
@@ -3413,4 +3413,4 @@ window.showPage = function(id) {
 })();
 </script>
 </body>
-</html>
+</html
