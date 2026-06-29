@@ -303,6 +303,18 @@ h4 { font-size: clamp(16px, 1.8vw, 22px); }
     radial-gradient(ellipse at 18% 85%, rgba(198,161,91,.06) 0%, transparent 50%);
   display:flex;flex-direction:column;
   position:relative;overflow:visible;
+  isolation:isolate;
+}
+.hero-bg-logo {
+  position:absolute;
+  width:96vw;
+  height:auto;
+  top:0px;
+  right:-38.4vw;
+  opacity:.30;
+  pointer-events:none;
+  user-select:none;
+  z-index:0;
 }
 /* Hero nav (inside hero section) */
 .hero-nav {
@@ -1017,6 +1029,7 @@ footer::before {
   .hero-grid{grid-template-columns:1fr;}
   .hero-visual{display:none;}
   .hero-section{min-height:auto;padding-top:10px;}
+  .hero-bg-logo{width:1600vw!important;top:120px!important;left:70%!important;right:auto!important;transform:translateX(-50%)!important;opacity:.30!important;}
   .hero-nav{padding:18px 20px;}
   .hero-body{padding:120px 0 60px;}
   .hero-nav-links{display:none;}
@@ -1040,6 +1053,7 @@ footer::before {
 @media (max-width:480px) {
   .grid-4{grid-template-columns:1fr;}
   .stat-num{font-size:44px;}
+  .hero-bg-logo{width:1600vw!important;top:120px!important;left:70%!important;right:auto!important;transform:translateX(-50%)!important;opacity:.30!important;}
 }
 @media (max-width:768px) {
   /* Plantas: tamanho original fixo, sem variação de escala */
@@ -1053,6 +1067,294 @@ footer::before {
   .section, .section-sm, .page-hero { content-visibility: auto; contain-intrinsic-size: 0 550px; }
   /* Impede que plantas nas bordas causem scroll horizontal */
   .plant-zone { overflow-x: clip; }
+}
+.responsive-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:768px){.responsive-grid-3{grid-template-columns:1fr;gap:14px;}}
+@media(min-width:769px) and (max-width:1024px){.responsive-grid-3{grid-template-columns:repeat(2,1fr);}}
+
+/* ─── PROJETOS: imagens sem corte ─── */
+.proj-img-contain-wrap {
+  border-radius: var(--r-lg);
+  background: var(--aria-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  min-height: 280px;
+}
+.proj-img-contain-wrap img {
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: contain;
+  display: block;
+}
+/* Emerging initiative cards with image */
+.emerging-img-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px 18px 0;
+  background: transparent;
+}
+.emerging-img-wrap img {
+  width: 100%;
+  height: auto;
+  max-height: 175px;
+  object-fit: contain;
+  display: block;
+}
+/* WhatsApp icon in button */
+.wa-btn-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  margin: -4px 0 -4px;
+  flex-shrink: 0;
+  position: relative;
+  top: 1px;
+}
+/* Projeto Se Prepara Menina: título em linha */
+.proj-title-nowrap {
+  font-size: clamp(22px, 3.5vw, 36px);
+}
+/* Iniciativas em desenvolvimento: título em linha */
+.iniciativas-nowrap {
+  font-size: clamp(20px, 3vw, 32px);
+}
+@media (min-width: 541px) {
+  .proj-title-nowrap  { white-space: nowrap; }
+  .iniciativas-nowrap { white-space: nowrap; }
+}
+/* Distância extra entre roupinha e iniciativas */
+.section-iniciativas {
+  margin-top: 72px;
+}
+
+/* ─── FLOATING FIGURES (Depoimentos & Casos de Resgate) ─── */
+.floating-figures-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 36px 24px;
+  justify-items: center;
+  padding: 8px 0 16px;
+}
+.floating-story-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: center;
+}
+.floating-story-shape {
+  overflow: hidden;
+  transition: transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 380ms ease;
+  will-change: transform;
+}
+.floating-story-shape img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Shape variants */
+.shape-circle  .floating-story-shape { width: 112px; height: 112px; border-radius: 50%; }
+.shape-organic .floating-story-shape { width: 112px; height: 122px; border-radius: 58% 42% 60% 40% / 52% 56% 44% 48%; }
+.shape-rect    .floating-story-shape { width: 100px; height: 130px; border-radius: 38% 62% 42% 58% / 44% 40% 60% 56%; }
+
+.floating-story-trigger:hover .floating-story-shape {
+  transform: translateY(-10px) scale(1.06);
+  box-shadow: var(--shadow-lg);
+}
+.floating-story-trigger:focus-visible .floating-story-shape {
+  outline: 2px solid var(--aria-wine);
+  outline-offset: 4px;
+}
+.floating-story-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+.floating-story-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--aria-brown);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  line-height: 1.3;
+  max-width: 120px;
+}
+@keyframes floating-sway {
+  0%, 100% { transform: translateY(0px) rotate(-1.2deg); }
+  50%       { transform: translateY(-6px) rotate(1.2deg); }
+}
+.floating-story-trigger .floating-story-shape { animation: floating-sway 5.2s ease-in-out infinite; }
+.floating-story-trigger:nth-child(2n)  .floating-story-shape { animation-delay: -1.8s; animation-duration: 6.1s; }
+.floating-story-trigger:nth-child(3n)  .floating-story-shape { animation-delay: -3.2s; animation-duration: 4.8s; }
+.floating-story-trigger:nth-child(4n)  .floating-story-shape { animation-delay: -2.4s; animation-duration: 7s; }
+.floating-story-trigger:nth-child(5n)  .floating-story-shape { animation-delay: -0.9s; animation-duration: 5.7s; }
+.floating-story-trigger:hover .floating-story-shape { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .floating-story-trigger .floating-story-shape { animation: none; }
+}
+
+/* ─── IMPACT MODAL ─── */
+.impact-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(29, 13, 10, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.impact-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.impact-modal-panel {
+  background: var(--aria-ivory);
+  border-radius: var(--r-xl);
+  max-width: 640px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  position: relative;
+  transform: scale(0.88) translateY(28px);
+  transition: transform 360ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 360ms ease;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+}
+.impact-modal-backdrop.open .impact-modal-panel {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+.impact-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(59,37,26,.12);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background var(--t), transform var(--t);
+}
+.impact-modal-close:hover { background: rgba(59,37,26,.22); transform: scale(1.1); }
+.impact-modal-photo {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  display: block;
+  flex-shrink: 0;
+}
+.impact-modal-photo-ph {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.impact-modal-content { padding: 28px 36px 36px; flex: 1; }
+.impact-modal-content .modal-name {
+  font-family: 'Libre Baskerville', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--aria-brown);
+  margin-bottom: 4px;
+}
+.impact-modal-content .modal-role {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--aria-rose);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+.impact-modal-content .modal-text {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--aria-brown);
+  line-height: 1.76;
+}
+.impact-modal-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 22px;
+}
+.impact-placeholder {
+  aspect-ratio: 1;
+  border-radius: var(--r-md);
+  background: var(--aria-card);
+  border: 1.5px dashed var(--aria-border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.impact-placeholder-inner {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  color: var(--aria-muted);
+  text-align: center;
+  padding: 8px;
+  line-height: 1.5;
+}
+/* Variação para casos de resgate */
+.impact-modal-panel.rescue-variant { border-top: 4px solid var(--aria-wine); }
+.impact-modal-panel.rescue-variant .modal-name { color: var(--aria-wine); }
+/* ── Logo hero mobile: regra de alta especificidade, breakpoint amplo ── */
+@media (max-width:1100px) {
+  section.hero-section img.hero-bg-logo {
+    width: 200vw !important;
+    top: 400px !important;
+    left: 88% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    opacity: .30 !important;
+  }
+}
+@media (max-width: 768px) {
+  .floating-figures-grid {
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    gap: 24px 14px;
+  }
+  .shape-circle  .floating-story-shape { width: 84px; height: 84px; }
+  .shape-organic .floating-story-shape { width: 84px; height: 92px; }
+  .shape-rect    .floating-story-shape { width: 78px; height: 102px; }
+  .impact-modal-content { padding: 22px 20px 28px; }
+  .impact-modal-content .modal-text { font-size: 14.5px; }
+  .impact-modal-gallery { grid-template-columns: repeat(2, 1fr); }
+  .impact-modal-photo { height: 220px; }
 }
 </style>
 
@@ -1289,6 +1591,7 @@ footer::before {
 
   <!-- HERO -->
   <section class="hero-section plant-zone" aria-label="Apresentação do Instituto ARIA">
+    <img class="hero-bg-logo" src="assets/material2/logo-hero_SVG.svg" alt="" aria-hidden="true">
 
     <div class="hero-body">
       <div class="container">
@@ -1373,7 +1676,7 @@ footer::before {
               <div class="hero-badge-num">180+</div>
               <div class="hero-badge-label">Famílias<br>atendidas</div>
             </div>
-            <div class="hero-badge hero-badge-2" aria-label="Mais de 60 animais resgatados">
+            <div class="hero-badge hero-badge-2" aria-label="Mais de 180 animais alcançados pelo Viralatinha">
               <div class="hero-badge-num">60+</div>
               <div class="hero-badge-label">Animais<br>resgatados</div>
             </div>
@@ -1415,7 +1718,7 @@ footer::before {
           <div class="eyebrow">Nossa história</div>
           <h2 id="home-sobre-h">Nascemos do cuidado,<br><em style="color:var(--aria-wine);font-style:italic;">crescemos com amor</em></h2>
           <p style="color:var(--aria-muted);margin:20px 0 14px;line-height:1.82;">
-            O Instituto ARIA nasceu em Marituba, Pará, com uma missão simples e profunda: ser um espaço de acolhimento real para quem mais precisa. Fundado por Carol Braga, partiu da convicção de que cuidar é um ato político — e que toda pessoa merece ter acesso a saúde, educação e dignidade.
+            O Instituto ARIA nasceu em Marituba, Pará, com uma missão simples e profunda: ser um espaço de acolhimento real para quem mais precisa. Fundado por Caroline Semiramis, partiu da convicção de que cuidar é um ato político — e que toda pessoa merece ter acesso a saúde, educação e dignidade.
           </p>
           <p style="color:var(--aria-muted);margin-bottom:28px;line-height:1.82;">
             Nossa atuação integra o cuidado humano ao cuidado animal, porque acreditamos que a compaixão não tem espécie. Cada projeto nasce de um olhar atento ao que a comunidade realmente precisa.
@@ -1430,7 +1733,7 @@ footer::before {
           <div id="sway-slow-zone-3" class="plant-zone sway-slow-zone" data-plant-sym="plant-slow-3" style="position:absolute;right:-20px;top:-30px;width:80px;height:120px;overflow:visible;"></div>
           <div class="blockquote-card fade-up delay-1">
             <blockquote>"Cuidar não é um privilégio — é um direito. E o ARIA existe para garantir que nenhuma família em Marituba fique sem esse cuidado."</blockquote>
-            <cite>— Carol Braga, Fundadora do Instituto ARIA</cite>
+            <cite>— Caroline Semiramis, Fundadora do Instituto ARIA</cite>
           </div>
           <div style="margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
             <div class="aria-card" style="padding:20px;">
@@ -1470,17 +1773,17 @@ footer::before {
         <p>Cada projeto é uma resposta concreta ao que a comunidade nos conta que precisa.</p>
       </div>
       <div class="grid-3">
-        <div class="project-card fade-up delay-1" onclick="showPage('projetos')" role="button" tabindex="0" aria-label="Ver projeto Florescer">
-          <img class="project-card-img" src="https://loremflickr.com/420/210/crafts,workshop,women?lock=21" alt="Oficina de artesanato — Projeto Florescer" loading="lazy"/>
+        <div class="project-card fade-up delay-1" onclick="showPage('projetos')" role="button" tabindex="0" aria-label="Ver projeto Se Prepara Menina">
+          <img class="project-card-img" src="assets/material2/aria-se-prepara-menina-capa.png" alt="Projeto Se Prepara Menina — Instituto ARIA" loading="lazy"/>
           <div class="project-card-body">
             <div class="project-status"><span class="status-dot"></span>Ativo</div>
-            <h3>Florescer</h3>
+            <h3>Se Prepara Menina</h3>
             <p>Oficinas de desenvolvimento pessoal, artesanato e geração de renda para mulheres em situação de vulnerabilidade.</p>
             <span class="project-card-link">Saiba mais →</span>
           </div>
         </div>
         <div class="project-card fade-up delay-2" onclick="showPage('projetos')" role="button" tabindex="0" aria-label="Ver projeto Viralatinha">
-          <img class="project-card-img" src="https://loremflickr.com/420/210/dog,rescue,adoption?lock=22" alt="Animal resgatado — Projeto Viralatinha" loading="lazy"/>
+          <img class="project-card-img" src="assets/material2/aria-viralatinha-capa.png" alt="Projeto Viralatinha — Instituto ARIA" loading="lazy"/>
           <div class="project-card-body">
             <div class="project-status"><span class="status-dot"></span>Ativo</div>
             <h3>Viralatinha</h3>
@@ -1518,7 +1821,7 @@ footer::before {
           <img src="https://loremflickr.com/54/54/woman,portrait,smile?lock=31" alt="Depoente" style="width:54px;height:54px;border-radius:50%;border:2px solid rgba(198,161,91,.4);object-fit:cover;margin-bottom:16px;" loading="lazy"/>
           <p class="story-quote">"Antes de conhecer o ARIA, eu sentia que não havia saída. As oficinas me devolveram a esperança — e hoje tenho meu próprio negócio de artesanato."</p>
           <span class="story-name">Maria*, 34 anos</span>
-          <span class="story-role">Participante do Projeto Florescer</span>
+          <span class="story-role">Participante do Projeto Se Prepara Menina</span>
         </div>
         <div class="story-card fade-up delay-2">
           <div class="story-accent" style="background:var(--aria-gold);"></div>
@@ -1607,89 +1910,111 @@ footer::before {
     <div class="container">
       <div class="eyebrow">Nossa identidade</div>
       <h1>Quem somos</h1>
-      <p>Uma organização construída por pessoas que acreditam no poder do <em>cuidado coletivo</em>.</p>
+      <p>Uma organização construída por pessoas que acreditam no poder do <em>cuidado coletivo</em>. Somos o Instituto ARIA — igualdade, acolhimento e transformação social em cada ação.</p>
+    </div>
+  </section>
+
+  <!-- QUEM SOMOS — bloco descritivo -->
+  <section class="section plant-zone" style="background:var(--aria-ivory);" aria-labelledby="qs-ident-h">
+    <div class="container">
+      <div class="grid-2">
+        <div class="fade-up">
+          <div class="eyebrow">Quem somos?</div>
+          <h2 id="qs-ident-h" style="margin-bottom:20px;">O que fazemos</h2>
+          <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:12px;">
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Somos uma organização dedicada a promover <strong>igualdade de gênero no trabalho</strong>.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Trabalhamos pelo <strong>acolhimento de mulheres</strong> em situação de vulnerabilidade social.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Lutamos pela <strong>dignidade de animais</strong> em situação de rua.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Investimos na <strong>promoção de cultura e esportes</strong> para comunidades carentes.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Promovemos a <strong>resiliência climática</strong>.</span></li>
+          </ul>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <span class="chip">Empoderamento Feminino</span>
+            <span class="chip chip-sage">Desenvolvimento Social</span>
+            <span class="chip chip-gold">Proteção Animal</span>
+          </div>
+        </div>
+        <div class="fade-up delay-1">
+          <div class="eyebrow">O que nos move</div>
+          <div class="aria-card" style="margin-bottom:12px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="min-width:36px;height:36px;border-radius:50%;background:var(--aria-plum);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;">1</div>
+              <div>
+                <h4 style="margin-bottom:6px;">Missão</h4>
+                <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;margin:0;">Transformar realidades com atitudes concretas.</p>
+              </div>
+            </div>
+          </div>
+          <div class="aria-card" style="margin-bottom:12px;">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="min-width:36px;height:36px;border-radius:50%;background:var(--aria-plum);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;">2</div>
+              <div>
+                <h4 style="margin-bottom:6px;">Visão</h4>
+                <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;margin:0;">Ser referência em igualdade, acolhimento e transformação social.</p>
+              </div>
+            </div>
+          </div>
+          <div class="aria-card">
+            <div style="display:flex;gap:14px;align-items:flex-start;">
+              <div style="min-width:36px;height:36px;border-radius:50%;background:var(--aria-plum);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:15px;">3</div>
+              <div>
+                <h4 style="margin-bottom:6px;">Valores</h4>
+                <ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;">
+                  <li style="font-size:13px;color:var(--aria-muted);line-height:1.6;"><strong>A</strong>titude: Fazer acontecer.</li>
+                  <li style="font-size:13px;color:var(--aria-muted);line-height:1.6;"><strong>R</strong>epresentatividade: Garantir voz para todos.</li>
+                  <li style="font-size:13px;color:var(--aria-muted);line-height:1.6;"><strong>I</strong>gualdade: Combater desigualdades em todas as formas.</li>
+                  <li style="font-size:13px;color:var(--aria-muted);line-height:1.6;"><strong>A</strong>colhimento: Estar presente para quem precisa.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- FUNDADORA -->
-  <section class="section plant-zone" style="background:var(--aria-ivory);" aria-labelledby="qs-fund-h">
+  <section class="section plant-zone" style="background:var(--aria-cream);" aria-labelledby="qs-fund-h">
     <div class="container">
       <div class="grid-2">
         <div class="fade-up">
-          <div style="width:180px;height:180px;border-radius:50%;background:linear-gradient(148deg,var(--aria-blush),var(--aria-card));border:3px solid var(--aria-border-gold);display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:var(--shadow-md);" aria-label="Foto de Carol Braga">
+          <div style="width:180px;height:180px;border-radius:50%;background:linear-gradient(148deg,var(--aria-blush),var(--aria-card));border:3px solid var(--aria-border-gold);display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:var(--shadow-md);" aria-label="Foto de Caroline Semiramis">
             <svg width="70" height="70" viewBox="0 0 70 70" fill="none" opacity=".5"><circle cx="35" cy="28" r="14" fill="#DFA5A0" fill-opacity=".6"/><path d="M10 62 C10 48 20 42 35 42 C50 42 60 48 60 62" fill="#DFA5A0" fill-opacity=".4"/></svg>
           </div>
-          <div class="eyebrow">Fundadora</div>
-          <h2 id="qs-fund-h">Carol Braga</h2>
+          <div class="eyebrow">Fundadora &amp; Diretora Executiva</div>
+          <h2 id="qs-fund-h">Caroline Semiramis</h2>
           <p style="color:var(--aria-muted);line-height:1.82;margin:16px 0;">
-            Carol Braga é a fundadora e diretora executiva do Instituto ARIA. Educadora de formação, ela fundou a organização em 2020 movida pela convicção de que o cuidado genuíno transforma não apenas vidas individuais, mas comunidades inteiras.
+            Engenheira Civil, pós-graduada em Gestão de Projetos e fundadora do Instituto ARIA, Caroline Semiramis transformou anos de experiência em liderança, gestão e atuação voluntária em uma missão de impacto social.
+          </p>
+          <p style="color:var(--aria-muted);line-height:1.82;margin-bottom:16px;">
+            Desde a juventude, participou de iniciativas voltadas à infância, educação e desenvolvimento comunitário. Em 2024, criou o Projeto Se Prepara Menina — que daria origem ao Instituto ARIA, com o propósito de ampliar oportunidades para mulheres, jovens e comunidades em situação de vulnerabilidade.
           </p>
           <p style="color:var(--aria-muted);line-height:1.82;margin-bottom:24px;">
-            Com mais de uma década de experiência em projetos sociais no Pará, Carol construiu uma metodologia própria que integra escuta ativa, formação contínua e criação de redes de apoio. Acredita que cada pessoa carrega em si a capacidade de florescer — basta encontrar o ambiente certo.
+            A causa animal também faz parte de sua trajetória desde a infância. Movida pela empatia e pelo compromisso com o bem-estar animal, lidera iniciativas de resgate, proteção e conscientização, buscando construir uma cultura de respeito e responsabilidade com os animais.
           </p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <span class="chip">Educação Popular</span>
-            <span class="chip chip-sage">Assistência Social</span>
+            <span class="chip">Engenharia Civil</span>
+            <span class="chip chip-sage">Gestão de Projetos</span>
             <span class="chip chip-gold">Proteção Animal</span>
           </div>
         </div>
         <div class="fade-up delay-1">
           <div class="blockquote-card" style="margin-bottom:24px;">
-            <blockquote>"Quando olhei ao redor e vi mulheres sem acesso a cuidados básicos, não consegui ficar parada. O ARIA nasceu dessa inquietação — e nunca para de crescer."</blockquote>
-            <cite>— Carol Braga, Fundadora</cite>
+            <blockquote>"Quando uma mulher recebe acesso a conhecimento, oportunidades e apoio, os impactos raramente ficam restritos à sua própria vida. Os benefícios alcançam famílias, fortalecem comunidades e criam condições para transformações sociais que atravessam gerações."</blockquote>
+            <cite>— Caroline Semiramis, Fundadora</cite>
           </div>
-          <div class="aria-card">
-            <h4 style="margin-bottom:14px;">Missão</h4>
-            <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Promover o desenvolvimento integral de mulheres, famílias e animais em situação de vulnerabilidade em Marituba e região, por meio de ações de formação, acolhimento e proteção.</p>
-          </div>
-          <div class="aria-card" style="margin-top:14px;">
-            <h4 style="margin-bottom:14px;">Visão</h4>
-            <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Ser referência regional em acolhimento humanizado, contribuindo para uma Amazônia onde toda pessoa vive com dignidade e todo animal é tratado com respeito.</p>
-          </div>
+          <p style="color:var(--aria-muted);line-height:1.82;">
+            Sua atuação concentra-se em três causas fundamentais: <strong>empoderamento feminino</strong>, <strong>desenvolvimento de jovens</strong> e <strong>proteção animal</strong>. Acredita que mulheres fortalecidas se tornam agentes capazes de transformar famílias, comunidades e futuras gerações.
+          </p>
+          <p style="color:var(--aria-muted);line-height:1.82;margin-top:12px;">
+            Sob sua liderança, o Instituto ARIA trabalha para transformar solidariedade em ação concreta, conectando pessoas, empresas e voluntários em projetos que geram oportunidades, promovem dignidade e produzem impacto social real.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- VALORES -->
-  <section class="section plant-zone" style="background:var(--aria-cream);" aria-labelledby="qs-val-h">
-    <div class="container">
-      <div class="section-header fade-up">
-        <div class="eyebrow">O que guia nossas ações</div>
-        <h2 id="qs-val-h">Nossos valores</h2>
-      </div>
-      <div class="grid-4">
-        <div class="aria-card-ivory fade-up delay-1" style="text-align:center;padding:28px 20px;">
-          <div style="width:56px;height:56px;border-radius:16px;background:rgba(184,115,125,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 22C12 20 5 16 5 10.5A4.5 4.5 0 0113 7a4.5 4.5 0 018 3.5C21 16 14 20 13 22z" stroke="#B8737D" stroke-width="1.5" stroke-linejoin="round" fill="#DFA5A0" fill-opacity=".2"/></svg>
-          </div>
-          <h4 style="margin-bottom:8px;">Cuidado</h4>
-          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;">Colocamos o bem-estar das pessoas e dos animais no centro de tudo o que fazemos.</p>
-        </div>
-        <div class="aria-card-ivory fade-up delay-2" style="text-align:center;padding:28px 20px;">
-          <div style="width:56px;height:56px;border-radius:16px;background:rgba(111,116,104,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="9" stroke="#6F7468" stroke-width="1.5"/><path d="M9 13 L12 16 L17 10" stroke="#6F7468" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h4 style="margin-bottom:8px;">Transparência</h4>
-          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;">Prestamos contas de cada centavo doado e de cada ação realizada.</p>
-        </div>
-        <div class="aria-card-ivory fade-up delay-3" style="text-align:center;padding:28px 20px;">
-          <div style="width:56px;height:56px;border-radius:16px;background:rgba(198,161,91,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M5 13 C5 9 8 7 13 7 C18 7 21 9 21 13 C21 17 18 19 13 19 C8 19 5 17 5 13Z" stroke="#C6A15B" stroke-width="1.5" fill="none"/><path d="M13 7 L13 5 M13 19 L13 21 M5 13 L3 13 M21 13 L23 13" stroke="#C6A15B" stroke-width="1.5" stroke-linecap="round"/></svg>
-          </div>
-          <h4 style="margin-bottom:8px;">Inclusão</h4>
-          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;">Acolhemos todas as pessoas independentemente de origem, raça, gênero ou crença.</p>
-        </div>
-        <div class="aria-card-ivory fade-up delay-1" style="text-align:center;padding:28px 20px;">
-          <div style="width:56px;height:56px;border-radius:16px;background:rgba(139,74,94,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M13 4 L15 9 L21 9 L16 13 L18 19 L13 15 L8 19 L10 13 L5 9 L11 9Z" stroke="#8B4A5E" stroke-width="1.5" stroke-linejoin="round" fill="none"/></svg>
-          </div>
-          <h4 style="margin-bottom:8px;">Dignidade</h4>
-          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;">Toda pessoa merece ser tratada com respeito e ter acesso a uma vida plena.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+
 
   <!-- EQUIPE -->
   <section class="section plant-zone" style="background:var(--aria-ivory);" aria-labelledby="qs-eq-h">
@@ -1698,62 +2023,99 @@ footer::before {
         <div class="eyebrow">As pessoas por trás do ARIA</div>
         <h2 id="qs-eq-h">Nossa equipe</h2>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px;" class="grid-4">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;" class="responsive-grid-3">
+
         <div class="team-card fade-up delay-1">
-          <div class="team-photo-wrap" aria-label="Foto de Carol Braga">
-            <img src="https://loremflickr.com/78/78/woman,portrait,professional?lock=51" alt="Carol Braga" style="width:78px;height:78px;border-radius:50%;object-fit:cover;" loading="lazy"/>
-          </div>
-          <div class="team-name">Carol Braga</div>
-          <div class="team-role">Fundadora & Diretora</div>
+          <div class="team-photo-wrap" aria-label="Iniciais de Caroline" style="background:#6F7468;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">C</div>
+          <div class="team-name">Caroline</div>
+          <div class="team-role">Presidente</div>
         </div>
         <div class="team-card fade-up delay-2">
-          <div class="team-photo-wrap" aria-label="Foto de Ana Paula">
-            <img src="https://loremflickr.com/78/78/woman,portrait,professional?lock=52" alt="Ana Paula" style="width:78px;height:78px;border-radius:50%;object-fit:cover;" loading="lazy"/>
-          </div>
-          <div class="team-name">Ana Paula</div>
-          <div class="team-role">Assistente Social</div>
+          <div class="team-photo-wrap" aria-label="Iniciais de Érica" style="background:#9B6B8C;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">É</div>
+          <div class="team-name">Érica</div>
+          <div class="team-role">Vice-Presidente</div>
         </div>
         <div class="team-card fade-up delay-3">
-          <div class="team-photo-wrap" aria-label="Foto de Marcia Lima">
-            <img src="https://loremflickr.com/78/78/woman,portrait,professional?lock=53" alt="Marcia Lima" style="width:78px;height:78px;border-radius:50%;object-fit:cover;" loading="lazy"/>
-          </div>
-          <div class="team-name">Marcia Lima</div>
-          <div class="team-role">Coord. de Projetos</div>
+          <div class="team-photo-wrap" aria-label="Iniciais de Jean" style="background:#B8737D;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">J</div>
+          <div class="team-name">Jean</div>
+          <div class="team-role">1º Secretário</div>
         </div>
         <div class="team-card fade-up delay-1">
-          <div class="team-photo-wrap" aria-label="Foto de Dr. Ricardo">
-            <img src="https://loremflickr.com/78/78/man,portrait,professional?lock=54" alt="Dr. Ricardo" style="width:78px;height:78px;border-radius:50%;object-fit:cover;" loading="lazy"/>
-          </div>
-          <div class="team-name">Dr. Ricardo</div>
-          <div class="team-role">Médico Veterinário</div>
+          <div class="team-photo-wrap" aria-label="Iniciais de Marcio" style="background:#7A8F7B;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">M</div>
+          <div class="team-name">Marcio</div>
+          <div class="team-role">2º Secretário</div>
+        </div>
+        <div class="team-card fade-up delay-2">
+          <div class="team-photo-wrap" aria-label="Iniciais de Isis" style="background:#6F7468;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">I</div>
+          <div class="team-name">Isis</div>
+          <div class="team-role">1ª Tesoureira</div>
+        </div>
+        <div class="team-card fade-up delay-3">
+          <div class="team-photo-wrap" aria-label="Iniciais de Breno" style="background:#A4957B;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">B</div>
+          <div class="team-name">Breno</div>
+          <div class="team-role">2º Tesoureiro</div>
+        </div>
+        <div class="team-card fade-up delay-1">
+          <div class="team-photo-wrap" aria-label="Iniciais de Fernanda" style="background:#DFA5A0;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">F</div>
+          <div class="team-name">Fernanda</div>
+          <div class="team-role">Conselheira Fiscal</div>
+        </div>
+        <div class="team-card fade-up delay-2">
+          <div class="team-photo-wrap" aria-label="Iniciais de Handra" style="background:#DFA5A0;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">H</div>
+          <div class="team-name">Handra</div>
+          <div class="team-role">Conselheira Fiscal</div>
+        </div>
+        <div class="team-card fade-up delay-3">
+          <div class="team-photo-wrap" aria-label="Iniciais de Márcio Júnior" style="background:#6F7468;color:#fff;width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:700;font-size:22px;letter-spacing:1px;margin:0 auto 10px;">MJ</div>
+          <div class="team-name">Márcio Júnior</div>
+          <div class="team-role">Conselheiro Fiscal</div>
         </div>
       </div>
       <div style="text-align:center;margin-top:36px;" class="fade-up">
-        <p style="color:var(--aria-muted);font-size:14px;margin-bottom:16px;">Além da equipe fixa, contamos com mais de 20 voluntários ativos.</p>
+        <p style="color:var(--aria-muted);font-size:14px;margin-bottom:16px;">Além da diretoria, contamos com dezenas de voluntários ativos em toda a região.</p>
         <button class="btn-secondary" onclick="showPage('apoie')">Quero ser voluntário</button>
       </div>
     </div>
   </section>
 
   <!-- PARCEIROS -->
-  <section class="section-sm" style="background:var(--aria-bg);" aria-labelledby="qs-parc-h">
+  <section class="section-sm plant-zone" style="background:var(--aria-bg);" aria-labelledby="qs-parc-h">
     <div class="container">
       <div class="section-header fade-up">
         <div class="eyebrow">Quem caminha conosco</div>
         <h2 id="qs-parc-h">Nossos parceiros</h2>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" class="fade-up delay-1">
-        <div style="background:var(--aria-ivory);border-radius:var(--r-md);padding:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--aria-border-gold);min-height:80px;">
-          <span style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--aria-muted);">Prefeitura de Marituba</span>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+        <div class="aria-card fade-up" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:28px;line-height:1;">🏗️</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--aria-text);">Sá Moraes Engenharia</div>
+          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Programa Smart Florescer — apoio a projetos de capacitação e empoderamento feminino.</p>
         </div>
-        <div style="background:var(--aria-ivory);border-radius:var(--r-md);padding:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--aria-border-gold);min-height:80px;">
-          <span style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--aria-muted);">CRAS Marituba</span>
+        <div class="aria-card fade-up" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:28px;line-height:1;">🐾</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--aria-text);">Amigos da Castração</div>
+          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Parceiro em Barcarena, realizando castrações a preço de custo para animais resgatados.</p>
         </div>
-        <div style="background:var(--aria-ivory);border-radius:var(--r-md);padding:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--aria-border-gold);min-height:80px;">
-          <span style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--aria-muted);">Clínica Veterinária Parceira</span>
+        <div class="aria-card fade-up" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:28px;line-height:1;">🐕</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--aria-text);">Zoonoses</div>
+          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Recebe e encaminha animais vindos de Mosqueiro e região metropolitana.</p>
         </div>
-        <div style="background:var(--aria-ivory);border-radius:var(--r-md);padding:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--aria-border-gold);min-height:80px;">
-          <span style="font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--aria-muted);">Instituto de Bem-Estar PA</span>
+        <div class="aria-card fade-up" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:28px;line-height:1;">🎓</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--aria-text);">Faculdade Qualitas</div>
+          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Recebe animais resgatados nas turmas para exames e atendimentos supervisionados.</p>
+        </div>
+        <div class="aria-card fade-up" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:28px;line-height:1;">🌱</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--aria-text);">Colégio Pitágoras</div>
+          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Parceiro para implantação do Projeto Guardiões do Futuro — alunos como agentes de transformação socioambiental.</p>
+        </div>
+        <div class="aria-card fade-up" style="display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:28px;line-height:1;">🎵</div>
+          <div style="font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;color:var(--aria-text);">Marauaras</div>
+          <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Grupo de carimbó formado por mulheres de Mosqueiro — parceria cultural que o Instituto ARIA abraça como frente de incentivo à cultura local.</p>
         </div>
       </div>
     </div>
@@ -1784,14 +2146,16 @@ footer::before {
         <p>Cinco frentes de atuação, um único propósito: cuidar de quem mais precisa.</p>
       </div>
 
-      <!-- Florescer -->
+      <!-- Se Prepara Menina -->
       <div class="grid-2" style="margin-bottom:64px;padding-bottom:64px;border-bottom:1px solid var(--aria-border-gold);">
-        <div style="border-radius:var(--r-lg);overflow:hidden;" aria-label="Imagem do Projeto Florescer"><img src="https://loremflickr.com/560/340/women,crafts,community?lock=61" alt="Participantes do Projeto Florescer" style="width:100%;height:340px;object-fit:cover;border-radius:var(--r-lg);" loading="lazy"/></div>
+        <div class="proj-img-contain-wrap fade-up" aria-label="Imagem do Projeto Se Prepara Menina">
+          <img src="assets/material2/aria-se-prepara-menina-capa.png" alt="Projeto Se Prepara Menina — Instituto ARIA" loading="lazy"/>
+        </div>
         <div class="fade-up delay-1">
           <div class="project-status" style="margin-bottom:16px;"><span class="status-dot"></span>Em andamento</div>
-          <h2 style="margin-bottom:14px;">Projeto Florescer</h2>
+          <h2 class="proj-title-nowrap" style="margin-bottom:14px;">Projeto Se Prepara Menina</h2>
           <p style="color:var(--aria-muted);line-height:1.82;margin-bottom:14px;">
-            O Florescer oferece oficinas semanais de artesanato, culinária e empreendedorismo para mulheres em situação de vulnerabilidade econômica e social. Mais do que renda, o projeto cria laços e reconstrói autoestima.
+            O Projeto Se Prepara Menina oferece oficinas semanais de artesanato, culinária, empreendedorismo e capacitação digital para mulheres em situação de vulnerabilidade econômica e social. Mais do que renda, o projeto cria laços, reconstrói autoestima e abre portas profissionais.
           </p>
           <p style="color:var(--aria-muted);line-height:1.82;margin-bottom:22px;">
             As participantes aprendem técnicas de produção artesanal, gestão básica de pequenos negócios e comercialização de seus produtos. Muitas já possuem negócios próprios consolidados.
@@ -1821,34 +2185,42 @@ footer::before {
           <div class="project-status" style="margin-bottom:16px;"><span class="status-dot"></span>Em andamento</div>
           <h2 style="margin-bottom:14px;">Projeto Viralatinha</h2>
           <p style="color:var(--aria-muted);line-height:1.82;margin-bottom:14px;">
-            O Viralatinha é nossa resposta à situação de abandono animal em Marituba. Realizamos resgates emergenciais, cuidados veterinários básicos, castração e encaminhamento para adoção responsável.
+            O Viralatinha é nossa resposta à situação de abandono animal em Marituba e região. Já alcançamos <strong>180+ animais</strong>, realizamos <strong>50+ castrações</strong> e, com isso, contribuímos para que mais de <strong>5 milhões de animais</strong> deixassem de nascer nas ruas.
           </p>
           <p style="color:var(--aria-muted);line-height:1.82;margin-bottom:22px;">
-            Acreditamos que o cuidado com os animais reflete diretamente na qualidade de vida das comunidades. Um ambiente que respeita os animais também respeita as pessoas.
+            Acreditamos que o cuidado com os animais reflete diretamente na qualidade de vida das comunidades. Cada resgate, cada castração e cada adoção responsável é um passo rumo a cidades mais humanas e solidárias.
           </p>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;">
             <span class="chip">Resgate</span>
             <span class="chip chip-sage">Castração</span>
             <span class="chip chip-gold">Adoção responsável</span>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
             <div class="aria-card" style="padding:16px;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--aria-wine);font-weight:500;">60+</div>
-              <div style="font-size:12px;color:var(--aria-muted);">Animais resgatados</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--aria-wine);font-weight:500;">180+</div>
+              <div style="font-size:12px;color:var(--aria-muted);">Animais alcançados</div>
             </div>
             <div class="aria-card" style="padding:16px;">
-              <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--aria-wine);font-weight:500;">40+</div>
-              <div style="font-size:12px;color:var(--aria-muted);">Adotados com sucesso</div>
+              <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--aria-wine);font-weight:500;">50+</div>
+              <div style="font-size:12px;color:var(--aria-muted);">Animais castrados</div>
+            </div>
+            <div class="aria-card" style="padding:16px;">
+              <div style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--aria-wine);font-weight:500;">5M+</div>
+              <div style="font-size:12px;color:var(--aria-muted);">Deixaram de nascer nas ruas</div>
             </div>
           </div>
           <button class="btn-primary" onclick="showPage('apoie')">Apoie este projeto</button>
         </div>
-        <div style="border-radius:var(--r-lg);overflow:hidden;" aria-label="Imagem do Projeto Viralatinha"><img src="https://loremflickr.com/560/340/dog,rescue,animal?lock=62" alt="Animal resgatado Projeto Viralatinha" style="width:100%;height:340px;object-fit:cover;border-radius:var(--r-lg);" loading="lazy"/></div>
+        <div class="proj-img-contain-wrap" aria-label="Imagem do Projeto Viralatinha">
+          <img src="assets/material2/aria-viralatinha-capa.png" alt="Projeto Viralatinha — Instituto ARIA" loading="lazy"/>
+        </div>
       </div>
 
       <!-- Rede de Cuidados -->
       <div class="grid-2" style="margin-bottom:64px;padding-bottom:64px;border-bottom:1px solid var(--aria-border-gold);">
-        <div style="border-radius:var(--r-lg);overflow:hidden;" aria-label="Imagem da Rede de Cuidados"><img src="https://loremflickr.com/560/340/community,support,group?lock=63" alt="Rede de apoio comunitário" style="width:100%;height:340px;object-fit:cover;border-radius:var(--r-lg);" loading="lazy"/></div>
+        <div class="proj-img-contain-wrap" aria-label="Imagem da Rede de Cuidados">
+          <img src="assets/material2/aria-mulheres-juntas.png" alt="Rede de Cuidados — Instituto ARIA" loading="lazy"/>
+        </div>
         <div class="fade-up delay-1">
           <div class="project-status" style="margin-bottom:16px;"><span class="status-dot"></span>Em andamento</div>
           <h2 style="margin-bottom:14px;">Rede de Cuidados</h2>
@@ -1866,21 +2238,108 @@ footer::before {
         </div>
       </div>
 
+
+      <!-- Produto: Roupa Pós-Cirúrgica -->
+      <div id="produto-roupinha" style="padding-top:32px;">
+        <div class="section-header fade-up" style="margin-bottom:36px;">
+          <div class="eyebrow">Produto ARIA</div>
+          <h2>Roupinha Pós-Cirúrgica</h2>
+          <p>Cada peça vendida ajuda a salvar mais uma vida. <strong>Conforto que cuida. Amor que cura.</strong></p>
+        </div>
+        <div class="grid-2" style="gap:40px;align-items:start;">
+          <div class="proj-img-contain-wrap fade-up" style="box-shadow:var(--shadow-md);">
+            <img src="assets/material2/cachorro-e-gato-sem-fundo-final.png" alt="Roupinha pós-cirúrgica ARIA para cães e gatos" loading="lazy"/>
+          </div>
+          <div class="fade-up delay-1">
+            <h3 style="margin-bottom:16px;">Por que usar a roupinha ARIA?</h3>
+            <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;">
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Protege feridas e curativos no pós-operatório</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Evita lambeduras e coceiras</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Tecido leve, respirável e macio</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Mais conforto no pós-operatório</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Ideal para cães e gatos</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Zíper nas costas para praticidade</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Estampas exclusivas — estilo e fofura também fazem parte da cura!</span></li>
+            </ul>
+            <div class="blockquote-card" style="margin-bottom:24px;">
+              <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Ao comprar uma roupinha pós-cirúrgica, você <strong>transforma amor em cuidado</strong>. Todo o lucro do Instituto ARIA é revertido para o tratamento e recuperação de animais que precisam de atendimento.</p>
+            </div>
+            <!-- Tabela de tamanhos compacta -->
+            <h4 style="margin-bottom:10px;">Tabela de tamanhos e preços</h4>
+            <div style="overflow-x:auto;margin-bottom:20px;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                  <tr style="background:var(--aria-plum);color:#fff;">
+                    <th style="padding:6px 10px;text-align:left;">Tam.</th>
+                    <th style="padding:6px 10px;text-align:left;">Peso aprox.</th>
+                    <th style="padding:6px 10px;text-align:left;">Valor</th>
+                    <th style="padding:6px 10px;text-align:left;">Tam.</th>
+                    <th style="padding:6px 10px;text-align:left;">Peso aprox.</th>
+                    <th style="padding:6px 10px;text-align:left;">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">00</td><td>0,5–1 kg</td><td><strong>R$44,99</strong></td><td>09</td><td>10–13 kg</td><td><strong>R$49,99</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">0</td><td>1–1,5 kg</td><td><strong>R$44,99</strong></td><td>10</td><td>13–16 kg</td><td><strong>R$59,99</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">01</td><td>2–3 kg</td><td><strong>R$44,99</strong></td><td>11</td><td>16–20 kg</td><td><strong>R$59,99</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">02</td><td>3–4 kg</td><td><strong>R$44,99</strong></td><td>12</td><td>20–24 kg</td><td><strong>R$59,99</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">03</td><td>4–5 kg</td><td><strong>R$44,99</strong></td><td>13</td><td>24–30 kg</td><td><strong>R$80,00</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">04</td><td>5–6 kg</td><td><strong>R$44,99</strong></td><td>14</td><td>30–35 kg</td><td><strong>R$80,00</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">05</td><td>6–7 kg</td><td><strong>R$44,99</strong></td><td>15</td><td>35–45 kg</td><td><strong>R$80,00</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">06</td><td>7–8 kg</td><td><strong>R$49,99</strong></td><td>16</td><td>45+ kg</td><td><strong>R$96,00</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">07</td><td>8–9 kg</td><td><strong>R$49,99</strong></td><td>17</td><td>45+ kg</td><td><strong>R$96,00</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">08</td><td>9–10 kg</td><td><strong>R$49,99</strong></td><td></td><td></td><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <a href="https://wa.me/5591982558088?text=Ol%C3%A1!%20Quero%20comprar%20uma%20roupinha%20p%C3%B3s-cir%C3%BArgica%20do%20Instituto%20ARIA."
+               target="_blank" rel="noopener noreferrer"
+               class="btn-primary" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
+              <img src="assets/material2/whatsapp.png" alt="" aria-hidden="true" class="wa-btn-icon"/>
+              Comprar pelo WhatsApp · (91) 98255-8088
+            </a>
+          </div>
+        </div>
+      </div>
+
       <!-- Projetos emergentes -->
-      <div class="section-header fade-up" style="margin-bottom:36px;">
-        <h2>Iniciativas em desenvolvimento</h2>
+      <div class="section-header fade-up section-iniciativas" style="margin-bottom:36px;">
+        <h2 class="iniciativas-nowrap">Iniciativas em desenvolvimento</h2>
         <p>Projetos que estamos construindo com base na escuta da comunidade.</p>
       </div>
-      <div class="grid-2" style="gap:24px;">
-        <div class="aria-card fade-up delay-1">
-          <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em planejamento</div>
-          <h3 style="font-size:22px;margin-bottom:10px;">ARIA Educa</h3>
-          <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Reforço escolar e atividades culturais para crianças e adolescentes em situação de vulnerabilidade. Previsão de lançamento: 2025.</p>
+      <div class="grid-3 responsive-grid-3" style="gap:24px;">
+        <!-- Guardiões do Futuro -->
+        <div class="aria-card fade-up delay-1" style="padding:0;overflow:hidden;">
+          <div class="emerging-img-wrap">
+            <img src="assets/material2/aria-jovem-botanico-sem-fundo.png" alt="Guardiões do Futuro — Instituto ARIA" loading="lazy"/>
+          </div>
+          <div style="padding:20px;">
+            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em desenvolvimento</div>
+            <h3 style="font-size:22px;margin-bottom:10px;">Guardiões do Futuro</h3>
+            <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Parceria com o Colégio Pitágoras para transformar alunos em agentes de transformação socioambiental — juventude que cuida do mundo.</p>
+          </div>
         </div>
-        <div class="aria-card fade-up delay-2">
-          <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em planejamento</div>
-          <h3 style="font-size:22px;margin-bottom:10px;">Horta Comunitária</h3>
-          <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Horta urbana gerida pelas participantes do Florescer, gerando alimentos e renda complementar para as famílias atendidas.</p>
+        <!-- O Universo ARIA -->
+        <div class="aria-card fade-up delay-2" style="padding:0;overflow:hidden;">
+          <div class="emerging-img-wrap">
+            <img src="assets/material2/aria-universo-capa.png" alt="O Universo ARIA — canal digital do Instituto ARIA" loading="lazy"/>
+          </div>
+          <div style="padding:20px;">
+            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em breve</div>
+            <h3 style="font-size:22px;margin-bottom:10px;">O Universo ARIA</h3>
+            <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Canal no YouTube com conteúdo digital e acessível sobre empoderamento feminino, bem-estar animal e transformação social.</p>
+          </div>
+        </div>
+        <!-- Horta Comunitária -->
+        <div class="aria-card fade-up delay-3" style="padding:0;overflow:hidden;">
+          <div class="emerging-img-wrap">
+            <img src="assets/material2/aria-mulher-horta-botanica-sem-fundo-ok.png" alt="Horta Comunitária — Instituto ARIA" loading="lazy"/>
+          </div>
+          <div style="padding:20px;">
+            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em planejamento</div>
+            <h3 style="font-size:22px;margin-bottom:10px;">Horta Comunitária</h3>
+            <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Horta urbana gerida pelas participantes do Se Prepara Menina, gerando alimentos e renda complementar para as famílias atendidas.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1950,7 +2409,7 @@ footer::before {
                 <div style="font-family:'Cormorant Garamond',serif;font-size:42px;color:var(--aria-wine);font-weight:500;line-height:1;flex-shrink:0;">87%</div>
                 <div>
                   <div style="font-family:'Libre Baskerville',serif;font-size:14px;font-weight:700;color:var(--aria-brown);margin-bottom:4px;">Relatam melhora na autoestima</div>
-                  <div style="font-size:12.5px;color:var(--aria-muted);">Participantes do Projeto Florescer após 3 meses</div>
+                  <div style="font-size:12.5px;color:var(--aria-muted);">Participantes do Projeto Se Prepara Menina após 3 meses</div>
                 </div>
               </div>
             </div>
@@ -1978,36 +2437,158 @@ footer::before {
     </div>
   </section>
 
-  <!-- HISTÓRIAS DE IMPACTO COMPLETA -->
-  <section class="section plant-zone" style="background:var(--aria-bg);" aria-labelledby="imp-hist-h">
+  <!-- DEPOIMENTOS DO PROJETO SE PREPARA MENINA -->
+  <section class="section plant-zone" style="background:var(--aria-bg);" aria-labelledby="imp-dep-h">
     <div class="container">
       <div class="section-header fade-up">
-        <div class="eyebrow">Vidas transformadas</div>
-        <h2 id="imp-hist-h">Histórias de impacto</h2>
-        <p>Nomes fictícios para preservar a privacidade de quem partilhou sua história conosco.</p>
+        <div class="eyebrow">Quem viveu, conta</div>
+        <h2 id="imp-dep-h">Depoimentos</h2>
+        <p>Histórias reais de quem faz parte do Projeto Se Prepara Menina e do voluntariado ARIA. Clique em uma figura para ler.</p>
       </div>
-      <div class="grid-3">
-        <div class="story-card fade-up delay-1">
-          <div class="story-accent" style="background:var(--aria-rose);"></div>
-          <img src="https://loremflickr.com/54/54/woman,portrait,smile?lock=71" alt="Depoente" style="width:54px;height:54px;border-radius:50%;border:2px solid rgba(198,161,91,.4);object-fit:cover;margin-bottom:16px;" loading="lazy"/>
-          <p class="story-quote">"Eu não sabia que havia saída. O ARIA me mostrou que existe um mundo possível além da violência. Hoje tenho meu próprio negócio."</p>
-          <span class="story-name">Maria*, 34 anos</span>
-          <span class="story-role">Projeto Florescer · Marituba</span>
-        </div>
-        <div class="story-card fade-up delay-2">
-          <div class="story-accent" style="background:var(--aria-gold);"></div>
-          <img src="https://loremflickr.com/54/54/woman,portrait,smile?lock=72" alt="Depoente" style="width:54px;height:54px;border-radius:50%;border:2px solid rgba(198,161,91,.4);object-fit:cover;margin-bottom:16px;" loading="lazy"/>
-          <p class="story-quote">"O ARIA resgatou meu cachorro quando eu não tinha condição de pagar o veterinário. Trataram com tanto amor. Nunca vou esquecer."</p>
-          <span class="story-name">Ana*, 27 anos</span>
-          <span class="story-role">Projeto Viralatinha · Ananindeua</span>
-        </div>
-        <div class="story-card fade-up delay-3">
-          <div class="story-accent" style="background:var(--aria-sage);"></div>
-          <img src="https://loremflickr.com/54/54/woman,portrait,smile?lock=73" alt="Depoente" style="width:54px;height:54px;border-radius:50%;border:2px solid rgba(198,161,91,.4);object-fit:cover;margin-bottom:16px;" loading="lazy"/>
-          <p class="story-quote">"O acompanhamento me deu forças para sair de uma relação abusiva. O ARIA me ajudou a reconstruir minha vida inteira."</p>
-          <span class="story-name">Carla*, 41 anos</span>
-          <span class="story-role">Rede de Cuidados · Marituba</span>
-        </div>
+      <div class="floating-figures-grid">
+        <!-- Foto depoimentos — Se Prepara Menina -->
+        <button class="floating-story-trigger shape-circle fade-up delay-1"
+                onclick="openImpactModal('camyle')"
+                aria-label="Ver depoimento de Camyle">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0031.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Camyle</span>
+        </button>
+        <button class="floating-story-trigger shape-organic fade-up delay-2"
+                onclick="openImpactModal('orelie')"
+                aria-label="Ver depoimento de Orelie">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0032.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Orelie</span>
+        </button>
+        <button class="floating-story-trigger shape-rect fade-up delay-3"
+                onclick="openImpactModal('part3')"
+                aria-label="Ver depoimento de participante">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0033.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Participante</span>
+        </button>
+        <button class="floating-story-trigger shape-organic fade-up delay-1"
+                onclick="openImpactModal('part4')"
+                aria-label="Ver depoimento de participante">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0034.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Participante</span>
+        </button>
+        <button class="floating-story-trigger shape-circle fade-up delay-2"
+                onclick="openImpactModal('andriellen')"
+                aria-label="Ver depoimento de Andriellen">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0035.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Andriellen</span>
+        </button>
+        <button class="floating-story-trigger shape-rect fade-up delay-3"
+                onclick="openImpactModal('part6')"
+                aria-label="Ver depoimento de participante">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260623-WA0028.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Participante</span>
+        </button>
+        <!-- Depoimentos textuais — voluntariado -->
+        <button class="floating-story-trigger shape-circle fade-up delay-1"
+                onclick="openImpactModal('vol1')"
+                aria-label="Ver depoimento de voluntária">
+          <div class="floating-story-shape">
+            <div class="floating-story-placeholder" style="background:var(--aria-plum);" aria-hidden="true">🐾</div>
+          </div>
+          <span class="floating-story-name">Voluntária</span>
+        </button>
+        <button class="floating-story-trigger shape-organic fade-up delay-2"
+                onclick="openImpactModal('vol2')"
+                aria-label="Ver depoimento de voluntária">
+          <div class="floating-story-shape">
+            <div class="floating-story-placeholder" style="background:var(--aria-wine);" aria-hidden="true">💛</div>
+          </div>
+          <span class="floating-story-name">Voluntária</span>
+        </button>
+        <button class="floating-story-trigger shape-rect fade-up delay-3"
+                onclick="openImpactModal('vol3')"
+                aria-label="Ver depoimento de voluntária">
+          <div class="floating-story-shape">
+            <div class="floating-story-placeholder" style="background:var(--aria-brown);" aria-hidden="true">🌱</div>
+          </div>
+          <span class="floating-story-name">Voluntária</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASOS DE RESGATE -->
+  <section class="section plant-zone" style="background:var(--aria-ivory);" aria-labelledby="imp-casos-h">
+    <div class="container">
+      <div class="section-header fade-up">
+        <div class="eyebrow">Cada vida importa</div>
+        <h2 id="imp-casos-h">Casos de resgate</h2>
+        <p>Alguns dos animais que o Instituto ARIA ajudou a transformar. Clique em um caso para saber mais.</p>
+      </div>
+      <div class="floating-figures-grid">
+        <button class="floating-story-trigger shape-organic fade-up delay-1"
+                onclick="openRescueModal('mel')"
+                aria-label="Ver caso Mel">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0024.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Caso Mel</span>
+        </button>
+        <button class="floating-story-trigger shape-circle fade-up delay-2"
+                onclick="openRescueModal('sansao')"
+                aria-label="Ver caso Sansão">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0025.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Caso Sansão</span>
+        </button>
+        <button class="floating-story-trigger shape-rect fade-up delay-3"
+                onclick="openRescueModal('bethoven')"
+                aria-label="Ver caso Bethoven">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0026.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Caso Bethoven</span>
+        </button>
+        <button class="floating-story-trigger shape-circle fade-up delay-1"
+                onclick="openRescueModal('trigemeos')"
+                aria-label="Ver caso Trigêmeos">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0027.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Caso Trigêmeos</span>
+        </button>
+        <button class="floating-story-trigger shape-organic fade-up delay-2"
+                onclick="openRescueModal('felicia')"
+                aria-label="Ver caso Felícia">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0028.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Caso Felícia</span>
+        </button>
+        <button class="floating-story-trigger shape-rect fade-up delay-3"
+                onclick="openRescueModal('apolo')"
+                aria-label="Ver caso Apolo">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0029.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Caso Apolo</span>
+        </button>
+        <button class="floating-story-trigger shape-organic fade-up delay-1"
+                onclick="openRescueModal('melinaamora')"
+                aria-label="Ver caso Melina e Amora">
+          <div class="floating-story-shape">
+            <img src="assets/material2/IMG-20260622-WA0030.jpg" alt="" loading="lazy"/>
+          </div>
+          <span class="floating-story-name">Melina e Amora</span>
+        </button>
       </div>
     </div>
   </section>
@@ -2077,14 +2658,14 @@ footer::before {
         <div class="tier-card">
           <div class="tier-name">Semente</div>
           <div class="tier-price">R$25<span style="font-size:20px;color:var(--aria-muted);">/mês</span></div>
-          <div class="tier-desc">Contribui com insumos para as oficinas do Florescer e ração para os animais resgatados.</div>
+          <div class="tier-desc">Contribui com insumos para as oficinas do Projeto Se Prepara Menina e ração para os animais resgatados.</div>
           <button class="btn-secondary" onclick="showPage('apoie')" style="width:100%;justify-content:center;">Começar com R$25</button>
         </div>
         <div class="tier-card featured">
           <div class="tier-badge">Mais escolhido</div>
           <div class="tier-name">Flor</div>
           <div class="tier-price">R$75<span style="font-size:20px;color:var(--aria-muted);">/mês</span></div>
-          <div class="tier-desc">Financia uma sessão de acompanhamento psicossocial e materiais para duas participantes do Florescer.</div>
+          <div class="tier-desc">Financia uma sessão de acompanhamento psicossocial para participantes do Se Prepara Menina e suporte veterinário para um animal resgatado.</div>
           <button class="btn-primary" style="width:100%;justify-content:center;">Apoiar com R$75</button>
         </div>
         <div class="tier-card">
@@ -2176,7 +2757,7 @@ footer::before {
               Como posso ser voluntário?
               <svg class="faq-icon" width="20" height="20" viewBox="0 0 20 20"><path d="M5 8l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <div class="faq-answer" aria-hidden="true"><p>Preencha o formulário abaixo! Aceitamos voluntários presenciais em Marituba e remotos (comunicação, design, captação). Faremos uma conversa inicial para entender como você pode contribuir melhor.</p></div>
+            <div class="faq-answer" aria-hidden="true"><p>Preencha o formulário abaixo! Temos vagas presenciais em <strong>Barcarena, Belém, Ananindeua, Benevides, Marituba, Santa Bárbara, Mosqueiro e Abaetetuba</strong>, além de vagas remotas (comunicação, design, captação de recursos). Faremos uma conversa inicial para entender como você pode contribuir melhor.</p></div>
           </div>
         </div>
       </div>
@@ -2190,6 +2771,10 @@ footer::before {
         <div class="form-card fade-up">
           <h3 id="apoie-vol-h">Quero ser voluntário</h3>
           <p class="form-lead">Preencha o formulário e entraremos em contato em até 3 dias úteis.</p>
+          <div style="background:var(--aria-plum);color:#fff;border-radius:var(--r-sm);padding:12px 16px;margin-bottom:20px;font-size:13px;line-height:1.65;">
+            📍 <strong>Vagas presenciais</strong> em: Barcarena · Belém · Ananindeua · Benevides · Marituba · Santa Bárbara · Mosqueiro · Abaetetuba<br>
+            💻 <strong>Vagas remotas</strong>: comunicação, design, captação de recursos e mais.
+          </div>
           <form onsubmit="event.preventDefault();this.innerHTML='<p style=\'text-align:center;color:var(--aria-wine);font-size:18px;padding:20px;\'>✓ Obrigada! Entraremos em contato em breve.</p>';" novalidate>
             <div class="form-row">
               <div class="form-group">
@@ -2219,6 +2804,22 @@ footer::before {
                   <option>Outra</option>
                 </select>
               </div>
+            </div>
+            <div class="form-group">
+              <label for="vol-cidade">Cidade</label>
+              <select id="vol-cidade" name="cidade">
+                <option value="">Selecione sua cidade...</option>
+                <option>Marituba (sede)</option>
+                <option>Barcarena</option>
+                <option>Belém</option>
+                <option>Ananindeua</option>
+                <option>Benevides</option>
+                <option>Santa Bárbara do Pará</option>
+                <option>Mosqueiro</option>
+                <option>Abaetetuba</option>
+                <option>Remoto (online)</option>
+                <option>Outra cidade</option>
+              </select>
             </div>
             <div class="form-group">
               <label for="vol-msg">Por que quer ser voluntário?</label>
@@ -2517,7 +3118,7 @@ footer::before {
       <div class="footer-col footer-projetos-col">
         <h5>Projetos</h5>
         <ul>
-          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Florescer</a></li>
+          <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Se Prepara Menina</a></li>
           <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Viralatinha</a></li>
           <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Rede de Cuidados</a></li>
           <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">ARIA Educa</a></li>
@@ -2816,8 +3417,29 @@ window.showPage = function(id) {
   setTimeout(() => { if (window.recheckPlantPoints) window.recheckPlantPoints(); }, 120);
 };
 
-
 </script>
+
+<!-- ── MODAL ÚNICO — Depoimentos & Casos de Resgate ── -->
+<div id="impact-modal-backdrop" class="impact-modal-backdrop"
+     role="dialog" aria-modal="true" aria-labelledby="impact-modal-name"
+     style="display:flex;">
+  <div class="impact-modal-panel" id="impact-modal-panel">
+    <button class="impact-modal-close" id="impact-modal-close-btn" aria-label="Fechar">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/>
+      </svg>
+    </button>
+    <!-- Visual preenchido via JS -->
+    <div id="impact-modal-visual"></div>
+    <div class="impact-modal-content">
+      <div id="impact-modal-name" class="modal-name"></div>
+      <div id="impact-modal-role" class="modal-role"></div>
+      <p  id="impact-modal-text" class="modal-text"></p>
+      <div id="impact-modal-gallery" class="impact-modal-gallery" style="display:none;"></div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ═══ JARDIM ANIMADO — do cabeçalho ao rodapé · 3 a 5 por página · distribuição zonada ═══ */
 (function () {
@@ -3087,7 +3709,89 @@ window.showPage = function(id) {
 
       var active = pickFrom(lateralPts, minLat, maxLat).concat(pickFrom(interiorPts, minInt, maxInt));
 
+      // ── Distância mínima entre plantas e margens ──────────────────────────────
+      var MIN_PLANT_DIST = 90;   // px entre centros de quaisquer duas plantas
+      var MARGIN_ZONE_V  = 40;   // px mínimos do topo/base de cada zone
+      var MARGIN_ZONE_H  = 20;   // px mínimos das bordas esq/dir de cada zone (só desktop)
+
+      // Resolve âncora percentual/calc para coordenadas absolutas de página
+      function resolveAbsPos(zoneEl, xVal, yVal) {
+        var probe = document.createElement('div');
+        probe.style.cssText = 'position:absolute;left:' + xVal + ';top:' + yVal +
+          ';width:1px;height:1px;visibility:hidden;pointer-events:none;z-index:-1;';
+        zoneEl.appendChild(probe);
+        var pRect = probe.getBoundingClientRect();
+        var zRect = zoneEl.getBoundingClientRect();
+        zoneEl.removeChild(probe);
+        return {
+          absX: pRect.left + window.scrollX,
+          absY: pRect.top  + window.scrollY,
+          relX: pRect.left - zRect.left,
+          relY: pRect.top  - zRect.top,
+          zoneH: zRect.height,
+          zoneW: zRect.width
+        };
+      }
+
+      var placed  = [];   // {x, y} absolutas das plantas já aceites
+      var toPlace = [];   // pontos que passaram nos filtros
+
       active.forEach(function (point) {
+        var pos = resolveAbsPos(point.zone, point.x, point.y);
+
+        // Margem do topo e base da zone (sempre)
+        if (pos.relY < MARGIN_ZONE_V || pos.relY > pos.zoneH - MARGIN_ZONE_V) return;
+
+        // Margem das bordas esq/dir da zone (só desktop)
+        if (!isMobile) {
+          if (pos.relX < MARGIN_ZONE_H || pos.relX > pos.zoneW - MARGIN_ZONE_H) return;
+        }
+
+        // Distância mínima entre plantas
+        for (var _i = 0; _i < placed.length; _i++) {
+          var _dx = pos.absX - placed[_i].x;
+          var _dy = pos.absY - placed[_i].y;
+          if (Math.sqrt(_dx * _dx + _dy * _dy) < MIN_PLANT_DIST) return;
+        }
+
+        placed.push({ x: pos.absX, y: pos.absY });
+        toPlace.push(point);
+      });
+
+      // ── Distribuição 40 / 30 / 30 — topo / meio / base da página ────────────
+      // Aplicada APÓS o filtro existente, sem alterar configurações das flores.
+      // Divide a página em três faixas verticais e garante a proporção desejada.
+      if (toPlace.length > 2) {
+        var pageH = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight,
+          1
+        );
+        var cut1 = pageH * 0.333;
+        var cut2 = pageH * 0.667;
+        var bTop = [], bMid = [], bBot = [];
+        toPlace.forEach(function (p) {
+          var pos = resolveAbsPos(p.zone, p.x, p.y);
+          if      (pos.absY < cut1) bTop.push(p);
+          else if (pos.absY < cut2) bMid.push(p);
+          else                      bBot.push(p);
+        });
+        var n    = toPlace.length;
+        var nTop = Math.round(n * 0.40);
+        var nMid = Math.round(n * 0.30);
+        var nBot = n - nTop - nMid;
+        function pickBand(arr, count) {
+          return arr.slice()
+            .sort(function () { return rand() - 0.5; })
+            .slice(0, Math.min(count, arr.length));
+        }
+        toPlace = pickBand(bTop, nTop)
+          .concat(pickBand(bMid, nMid))
+          .concat(pickBand(bBot, nBot));
+      }
+      // ── Planta cada ponto selecionado ─────────────────────────────────────────
+
+      toPlace.forEach(function (point) {
         var plantId = 1 + Math.floor(rand() * TOTAL_PLANTS);
         var giantOk = eligibleForGiant && isGiantEligible(point.zone);
         plantAt(point.zone, point.x, point.y, plantId, allowDrag, giantOk, !point.textSafe);
@@ -3348,7 +4052,7 @@ window.showPage = function(id) {
     function triggerPlantAnim(vx, vy, absX, absY) {
       if (!activeSeed) return;
       var captured = activeSeed;
-      activeSeed = null; // zera imediatamente — bloqueia chamadas duplicadas
+      activeSeed = null;
 
       captured.style.left       = (vx - 13) + 'px';
       captured.style.top        = (vy - 13) + 'px';
@@ -3402,7 +4106,6 @@ window.showPage = function(id) {
       anchor.appendChild(slot);
       document.body.appendChild(anchor);
 
-      // .born vai no SVG (.plant-graphic), não no anchor (.plant-point)
       requestAnimationFrame(function() {
         requestAnimationFrame(function() { svg.classList.add('born'); });
       });
@@ -3411,6 +4114,112 @@ window.showPage = function(id) {
   })();
 
 })();
+
+// ── IMPACT MODAL (Depoimentos & Casos de Resgate) ──────────────────────────
+(function() {
+  var depData = {
+    camyle:    { name: 'Camyle',      role: 'Participante · Projeto Se Prepara Menina', img: 'assets/material2/IMG-20260622-WA0031.jpg', text: null },
+    orelie:    { name: 'Orelie',      role: 'Participante · Projeto Se Prepara Menina', img: 'assets/material2/IMG-20260622-WA0032.jpg', text: null },
+    part3:     { name: 'Participante',role: 'Projeto Se Prepara Menina',                img: 'assets/material2/IMG-20260622-WA0033.jpg', text: null },
+    part4:     { name: 'Participante',role: 'Projeto Se Prepara Menina',                img: 'assets/material2/IMG-20260622-WA0034.jpg', text: null },
+    andriellen:{ name: 'Andriellen',  role: 'Participante · Projeto Se Prepara Menina', img: 'assets/material2/IMG-20260622-WA0035.jpg', text: null },
+    part6:     { name: 'Participante',role: 'Instituto ARIA',                           img: 'assets/material2/IMG-20260623-WA0028.jpg', text: null },
+    vol1: { name: 'Voluntária', role: 'Instituto ARIA', emoji: '🐾', bg: 'var(--aria-plum)',
+      text: '"O voluntariado nos ensina que pequenas ações podem gerar grandes mudanças. Nem sempre conseguimos ajudar todos, mas cada animal que tem seu destino transformado nos lembra por que continuamos."' },
+    vol2: { name: 'Voluntária', role: 'Instituto ARIA', emoji: '💛', bg: 'var(--aria-wine)',
+      text: '"Quando comecei, pensei que estava apenas ajudando animais em situação de abandono. Com o tempo, percebi que eles também estavam me ajudando. Sou grata por ter descoberto esse caminho."' },
+    vol3: { name: 'Voluntária', role: 'Instituto ARIA', emoji: '🌱', bg: 'var(--aria-brown)',
+      text: '"O Instituto ARIA me fez refletir sobre como uma vida salva muda a história daquele animal... Mas participar dessa mudança transforma também a minha própria história."' }
+  };
+
+  var rescueData = {
+    mel:         { name: 'Caso Mel',            role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0024.jpg',
+      text: 'Resgatada em grave situação de maus-tratos, com ferimentos sérios no pescoço e corpo. Após cuidados emergenciais, Mel se recuperou completamente e hoje vive saudável e feliz.' },
+    sansao:      { name: 'Caso Sansão',         role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0025.jpg',
+      text: 'Encontrado em estado crítico nas ruas. Com tratamento veterinário e muito carinho, Sansão ganhou força e encontrou um lar amoroso.' },
+    bethoven:    { name: 'Caso Bethoven',       role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0026.jpg',
+      text: 'Resgatado com infecções e desnutrição severa. A dedicação da equipe ARIA garantiu sua recuperação e encaminhamento para adoção responsável.' },
+    trigemeos:   { name: 'Caso Trigêmeos',      role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0027.jpg',
+      text: 'Três filhotes resgatados juntos, ainda muito pequenos. Receberam os cuidados necessários e foram adotados por famílias que os aguardavam.' },
+    felicia:     { name: 'Caso Felícia',        role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0028.jpg',
+      text: 'Resgatada em situação de abandono, assustada e machucada. Com amor e cuidado, Felícia se tornou uma cadela alegre e sociável.' },
+    apolo:       { name: 'Caso Apolo',          role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0029.jpg',
+      text: 'Encontrado sozinho e ferido. A intervenção rápida do ARIA garantiu tratamento a tempo e uma segunda chance de vida para Apolo.' },
+    melinaamora: { name: 'Caso Melina e Amora', role: 'Resgate Animal · Instituto ARIA', img: 'assets/material2/IMG-20260622-WA0030.jpg',
+      text: 'Dupla de fêmeas resgatada juntas. Passaram por tratamento e foram adotadas — inseparáveis até hoje no novo lar.' }
+  };
+
+  var backdrop  = document.getElementById('impact-modal-backdrop');
+  var panel     = document.getElementById('impact-modal-panel');
+  var visualEl  = document.getElementById('impact-modal-visual');
+  var nameEl    = document.getElementById('impact-modal-name');
+  var roleEl    = document.getElementById('impact-modal-role');
+  var textEl    = document.getElementById('impact-modal-text');
+  var galleryEl = document.getElementById('impact-modal-gallery');
+  var closeBtn  = document.getElementById('impact-modal-close-btn');
+  var lastFocus = null;
+
+  function populateModal(data, isRescue) {
+    if (data.img) {
+      visualEl.innerHTML = '<img class="impact-modal-photo" src="' + data.img + '" alt="' + data.name + '"/>';
+    } else {
+      visualEl.innerHTML = '<div class="impact-modal-photo-ph" style="background:' + data.bg + ';"><span style="font-size:56px;" aria-hidden="true">' + data.emoji + '</span></div>';
+    }
+    nameEl.textContent = data.name;
+    roleEl.textContent = data.role;
+    if (data.text) {
+      textEl.textContent = data.text;
+      textEl.style.display = '';
+    } else {
+      textEl.textContent = '';
+      textEl.style.display = 'none';
+    }
+    if (isRescue) {
+      panel.classList.add('rescue-variant');
+      galleryEl.style.display = 'grid';
+      galleryEl.innHTML =
+        '<div class="impact-placeholder"><div class="impact-placeholder-inner">Foto adicional<br>em breve</div></div>' +
+        '<div class="impact-placeholder"><div class="impact-placeholder-inner">Foto adicional<br>em breve</div></div>' +
+        '<div class="impact-placeholder"><div class="impact-placeholder-inner">Foto adicional<br>em breve</div></div>';
+    } else {
+      panel.classList.remove('rescue-variant');
+      galleryEl.style.display = 'none';
+      galleryEl.innerHTML = '';
+    }
+  }
+
+  function openModal(data, isRescue) {
+    lastFocus = document.activeElement;
+    populateModal(data, isRescue);
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function() { closeBtn.focus(); }, 50);
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  }
+
+  window.openImpactModal = function(id) {
+    var data = depData[id];
+    if (data) openModal(data, false);
+  };
+  window.openRescueModal = function(id) {
+    var data = rescueData[id];
+    if (data) openModal(data, true);
+  };
+
+  backdrop.addEventListener('click', function(e) {
+    if (e.target === backdrop) closeModal();
+  });
+  closeBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+  });
+})();
 </script>
 </body>
-</html
+</html>
+>
