@@ -37,11 +37,14 @@
   --aria-blush-vivid: #E7A0A8;
   --aria-plum-vivid:  #67334E;
   --aria-gold-vivid:  #D2A84F;
+  --aria-gold-text:   #7A5514; /* âmbar escuro — texto sobre fundo claro */
   --aria-sage-vivid:  #748B72;
   /* Derivados */
   --aria-plum-d:      #3D2334;
   --aria-text:        #3B251A;
-  --aria-muted:       #7A6860;
+  --aria-muted:       #5A4037; /* escurecido para contraste 5.5:1 em fundos claros */
+  --aria-rose-text:   #7A2F3E; /* rosa escuro — texto em fundos claros */
+  --aria-sage-text:   #3D4A3A; /* sage escuro — texto em fundos claros */
   --aria-border:      rgba(216,200,182,.55);
   --aria-border-gold: rgba(198,161,91,.22);
   /* Sombras quentes */
@@ -61,7 +64,8 @@
 
 /* ─── 2. RESET ─── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; overflow-x: clip; } /* clip no html: propaga ao viewport sem criar BFC nem travar scroll vertical */
+script, noscript { display: none !important; visibility: hidden !important; height: 0 !important; overflow: hidden !important; }
+html { font-size: 16px; overflow-x: clip; background: var(--aria-plum-d); } /* clip no html: propaga ao viewport sem criar BFC nem travar scroll vertical */
 body {
   font-family: 'Nunito Sans', system-ui, sans-serif;
   background: var(--aria-cream);
@@ -105,7 +109,7 @@ h4 { font-size: clamp(16px, 1.8vw, 22px); }
   font-weight: 700;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--aria-rose);
+  color: var(--aria-rose-text);
   margin-bottom: 14px;
 }
 .eyebrow::before {
@@ -113,7 +117,7 @@ h4 { font-size: clamp(16px, 1.8vw, 22px); }
   display: inline-block;
   width: 22px;
   height: 1px;
-  background: var(--aria-rose);
+  background: var(--aria-rose-text);
   flex-shrink: 0;
 }
 
@@ -409,6 +413,17 @@ h4 { font-size: clamp(16px, 1.8vw, 22px); }
   display:flex;align-items:center;justify-content:center;
   box-shadow:var(--shadow-xl);
 }
+
+/* Hero carousel */
+.hero-carousel {
+  position:relative;width:100%;height:100%;overflow:hidden;border-radius:inherit;
+}
+.hero-slide {
+  position:absolute;inset:0;opacity:0;
+  transition:opacity 1s ease;
+}
+.hero-slide.active { opacity:1; }
+.hero-slide img { width:100%;height:100%;object-fit:cover;display:block; }
 /* Floating badges on hero visual */
 .hero-badge {
   position:absolute;background:var(--aria-ivory);
@@ -570,7 +585,7 @@ h4 { font-size: clamp(16px, 1.8vw, 22px); }
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
 .team-name { font-family:'Libre Baskerville',serif;font-size:15.5px;font-weight:700;color:var(--aria-brown);margin-bottom:4px; }
-.team-role { font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;color:var(--aria-rose);text-transform:uppercase;letter-spacing:1px; }
+.team-role { font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;color:var(--aria-rose-text);text-transform:uppercase;letter-spacing:1px; }
 /* Donation tier cards */
 .tier-card {
   border-radius:var(--r-lg);padding:36px 26px;text-align:center;
@@ -894,7 +909,7 @@ footer::before {
 
 /* ─── 20. FLOATING ─── */
 .wa-float {
-  position:fixed;bottom:32px;right:24px;z-index:9998;
+  position:fixed;bottom:90px;right:24px;z-index:9998;
   width:56px;height:56px;border-radius:50%;
   background:transparent;
   padding:0;border:none;
@@ -916,10 +931,15 @@ footer::before {
   border-radius:50%;
 }
 #mobile-cta-bar {
-  display:none;position:fixed;bottom:0;left:0;right:0;z-index:79;
+  display:flex;position:fixed;bottom:0;left:0;right:0;z-index:79;
   background:var(--aria-ivory);border-top:1px solid var(--aria-border-gold);
   padding:12px 20px;padding-bottom:calc(12px + env(safe-area-inset-bottom));
   gap:12px;align-items:center;box-shadow:0 -4px 20px rgba(59,37,26,.10);
+  transform:translateY(100%);pointer-events:none;
+  transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+#mobile-cta-bar.visible {
+  transform:translateY(0);pointer-events:auto;
 }
 .mob-cta-text { flex:1;font-size:12.5px;color:var(--aria-muted);line-height:1.3; }
 .mob-cta-text strong { display:block;font-size:13.5px;color:var(--aria-brown);font-family:'Libre Baskerville',serif; }
@@ -931,6 +951,19 @@ footer::before {
   transition:background var(--t),transform var(--t);
 }
 .mob-cta-btn:hover { background:var(--aria-plum);transform:scale(.98); }
+@media (min-width:769px) {
+  #mobile-cta-bar {
+    justify-content:center;gap:24px;padding:14px 40px;
+  }
+  .mob-cta-text {
+    flex:none;display:flex;align-items:center;gap:10px;font-size:15px;
+  }
+  .mob-cta-text strong {
+    display:inline;font-size:16px;
+  }
+  .mob-cta-text strong::after { content:' ·'; color:var(--aria-border); }
+  .mob-cta-btn { font-size:14px;padding:12px 28px; }
+}
 /* Cookie */
 #cookie {
   position:fixed;bottom:24px;left:24px;right:24px;max-width:500px;
@@ -996,7 +1029,7 @@ footer::before {
   font-family:'Montserrat',sans-serif;font-size:11.5px;font-weight:600;
   border:1px solid rgba(139,74,94,.14);transition:background var(--t);
 }
-.chip-sage { background:rgba(111,116,104,.08);color:var(--aria-sage-vivid);border-color:rgba(111,116,104,.14); }
+.chip-sage { background:rgba(111,116,104,.10);color:var(--aria-sage-text);border-color:rgba(61,74,58,.18); }
 .chip-gold { background:rgba(198,161,91,.12);color:var(--aria-brown);border-color:rgba(198,161,91,.22); }
 
 /* ─── 25. CONTACT CARDS ─── */
@@ -1042,7 +1075,6 @@ footer::before {
   .footer-contato-col{grid-column:1/-1;}
   .form-row{grid-template-columns:1fr;}
   .form-card{padding:28px 20px;}
-  #mobile-cta-bar{display:flex;}
   .wa-float{bottom:90px;}
   #cookie{left:12px;right:12px;bottom:80px;}
   .hero-ctas{flex-direction:column;align-items:flex-start;}
@@ -1552,6 +1584,7 @@ footer::before {
       <a class="nav-link" onclick="showPage('home')" role="button" tabindex="0">Início</a>
       <a class="nav-link" onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a>
       <a class="nav-link" onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a>
+      <a class="nav-link" onclick="showPage('produtos')" role="button" tabindex="0">Produtos</a>
       <a class="nav-link" onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a>
       <a class="nav-link" onclick="showPage('contato')" role="button" tabindex="0">Contato</a>
       <button class="nav-cta" onclick="showPage('apoie')">Apoie o ARIA</button>
@@ -1569,19 +1602,20 @@ footer::before {
   <button class="overlay-close" onclick="closeMobile()" aria-label="Fechar menu">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M1 1l16 16M17 1L1 17"/></svg>
   </button>
-  <!-- Botanical decoration — gerenciado pelo sistema de jardim -->
-  <div id="sway-slow-zone-1" style="position:absolute;inset:0;pointer-events:none;overflow:visible;" class="plant-zone sway-slow-zone" data-plant-sym="plant-slow-1"></div>
   <nav class="overlay-nav" aria-label="Navegação mobile">
     <a href="#" onclick="showPage('home')" role="button" tabindex="0">Início</a>
     <a href="#" onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a>
     <a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a>
+    <a href="#" onclick="showPage('produtos')" role="button" tabindex="0">Produtos</a>
     <a href="#" onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a>
     <a href="#" onclick="showPage('contato')" role="button" tabindex="0">Contato</a>
   </nav>
   <button class="btn-gold overlay-cta" onclick="showPage('apoie')" style="font-size:17px;padding:16px 40px;">Apoie o ARIA ✦</button>
   <p class="overlay-contact" style="margin-top:30px;">
-    <a href="https://wa.me/5591992226810" target="_blank" rel="noopener">WhatsApp: (91) 99222-6810</a>
+    <a href="https://wa.me/5591987671010" target="_blank" rel="noopener">WhatsApp: (91) 9.8767-1010</a>
   </p>
+  <!-- Botanical decoration — apenas no rodapé do menu -->
+  <div id="sway-slow-zone-1" style="position:absolute;bottom:0;left:0;right:0;height:200px;pointer-events:none;overflow:visible;" class="plant-zone sway-slow-zone" data-plant-sym="plant-slow-1"></div>
 </div>
 
 <!-- ╔══════════════════════════════════╗ -->
@@ -1641,8 +1675,24 @@ footer::before {
             <div id="sway-slow-zone-2" class="hero-branch-tl plant-zone sway-slow-zone" data-plant-sym="plant-slow-2" style="overflow:visible;"></div>
             <!-- Main image blob -->
             <div class="hero-img-wrap">
-              <div class="hero-img-placeholder" aria-label="Foto do Instituto ARIA" style="padding:0;overflow:hidden;">
-                <img src="https://loremflickr.com/400/480/woman,volunteer,community?lock=11" alt="Participante do Instituto ARIA" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" loading="eager" fetchpriority="high"/>
+              <div class="hero-img-placeholder" aria-label="Fotos do Instituto ARIA" style="padding:0;overflow:hidden;">
+                <div class="hero-carousel" id="heroCarousel">
+                  <div class="hero-slide active">
+                    <img src="https://loremflickr.com/540/645/volunteer,community,social?lock=31" alt="Voluntários do Instituto ARIA" loading="eager" fetchpriority="high"/>
+                  </div>
+                  <div class="hero-slide">
+                    <img src="https://loremflickr.com/540/645/children,education,brazil?lock=32" alt="Crianças no Instituto ARIA" loading="lazy"/>
+                  </div>
+                  <div class="hero-slide">
+                    <img src="https://loremflickr.com/540/645/animal,rescue,pet,care?lock=33" alt="Animais resgatados" loading="lazy"/>
+                  </div>
+                  <div class="hero-slide">
+                    <img src="https://loremflickr.com/540/645/garden,organic,community?lock=34" alt="Horta comunitária" loading="lazy"/>
+                  </div>
+                  <div class="hero-slide">
+                    <img src="https://loremflickr.com/540/645/family,help,support,care?lock=35" alt="Famílias atendidas" loading="lazy"/>
+                  </div>
+                </div>
               </div>
             </div>
             <!-- Flower decorations -->
@@ -1792,7 +1842,7 @@ footer::before {
           </div>
         </div>
         <div class="project-card fade-up delay-3" onclick="showPage('projetos')" role="button" tabindex="0" aria-label="Ver projeto Rede de Cuidados">
-          <img class="project-card-img" src="https://loremflickr.com/420/210/community,support,women?lock=23" alt="Atendimento psicossocial — Rede de Cuidados" loading="lazy"/>
+          <img class="project-card-img" src="assets/material2/aria-mulheres-juntas.png" alt="Atendimento psicossocial — Rede de Cuidados" loading="lazy"/>
           <div class="project-card-body">
             <div class="project-status"><span class="status-dot"></span>Ativo</div>
             <h3>Rede de Cuidados</h3>
@@ -1879,7 +1929,7 @@ footer::before {
       <div class="section-header fade-up" style="margin-bottom:32px;">
         <div class="eyebrow">Redes sociais</div>
         <h2 id="home-insta-h">Siga o Instituto ARIA</h2>
-        <p><a href="https://instagram.com/institutoaria" target="_blank" rel="noopener" style="color:var(--aria-wine);font-weight:600;">@institutoaria</a> no Instagram</p>
+        <p><a href="https://instagram.com/instituto.aria.ia" target="_blank" rel="noopener" style="color:var(--aria-wine);font-weight:600;">@instituto.aria.ia</a> no Instagram</p>
       </div>
       <div class="insta-grid fade-up delay-1" aria-label="Grade de fotos do Instagram">
         <!-- 6 placeholders -->
@@ -1891,7 +1941,7 @@ footer::before {
         <div class="insta-item" aria-label="Momento de alegria"><img src="https://loremflickr.com/220/220/child,smile,happy?lock=46" alt="Momento de alegria" style="width:100%;height:100%;object-fit:cover;transition:transform 350ms ease;" loading="lazy"/><div class="insta-overlay"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" stroke-width="1.5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="white" stroke="none"/></svg></div></div>
       </div>
       <div style="text-align:center;margin-top:28px;" class="fade-up">
-        <a href="https://instagram.com/institutoaria" target="_blank" rel="noopener" class="btn-secondary">Ver mais no Instagram</a>
+        <a href="https://instagram.com/instituto.aria.ia" target="_blank" rel="noopener" class="btn-secondary">Ver mais no Instagram</a>
       </div>
     </div>
   </section>
@@ -1922,11 +1972,11 @@ footer::before {
           <div class="eyebrow">Quem somos?</div>
           <h2 id="qs-ident-h" style="margin-bottom:20px;">O que fazemos</h2>
           <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:12px;">
-            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Somos uma organização dedicada a promover <strong>igualdade de gênero no trabalho</strong>.</span></li>
-            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Trabalhamos pelo <strong>acolhimento de mulheres</strong> em situação de vulnerabilidade social.</span></li>
-            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Lutamos pela <strong>dignidade de animais</strong> em situação de rua.</span></li>
-            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Investimos na <strong>promoção de cultura e esportes</strong> para comunidades carentes.</span></li>
-            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Promovemos a <strong>resiliência climática</strong>.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Somos uma organização dedicada a promover <strong>igualdade de gênero no trabalho</strong>.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Trabalhamos pelo <strong>acolhimento de mulheres</strong> em situação de vulnerabilidade social.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Lutamos pela <strong>dignidade de animais</strong> em situação de rua.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Investimos na <strong>promoção de cultura e esportes</strong> para comunidades carentes.</span></li>
+            <li style="display:flex;gap:12px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:18px;line-height:1.4;">✦</span><span style="color:var(--aria-muted);line-height:1.75;">Promovemos a <strong>resiliência climática</strong>.</span></li>
           </ul>
           <div style="display:flex;gap:10px;flex-wrap:wrap;">
             <span class="chip">Empoderamento Feminino</span>
@@ -2239,69 +2289,6 @@ footer::before {
       </div>
 
 
-      <!-- Produto: Roupa Pós-Cirúrgica -->
-      <div id="produto-roupinha" style="padding-top:32px;">
-        <div class="section-header fade-up" style="margin-bottom:36px;">
-          <div class="eyebrow">Produto ARIA</div>
-          <h2>Roupinha Pós-Cirúrgica</h2>
-          <p>Cada peça vendida ajuda a salvar mais uma vida. <strong>Conforto que cuida. Amor que cura.</strong></p>
-        </div>
-        <div class="grid-2" style="gap:40px;align-items:start;">
-          <div class="proj-img-contain-wrap fade-up" style="box-shadow:var(--shadow-md);">
-            <img src="assets/material2/cachorro-e-gato-sem-fundo-final.png" alt="Roupinha pós-cirúrgica ARIA para cães e gatos" loading="lazy"/>
-          </div>
-          <div class="fade-up delay-1">
-            <h3 style="margin-bottom:16px;">Por que usar a roupinha ARIA?</h3>
-            <ul style="list-style:none;padding:0;margin:0 0 24px;display:flex;flex-direction:column;gap:10px;">
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Protege feridas e curativos no pós-operatório</span></li>
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Evita lambeduras e coceiras</span></li>
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Tecido leve, respirável e macio</span></li>
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Mais conforto no pós-operatório</span></li>
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Ideal para cães e gatos</span></li>
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Zíper nas costas para praticidade</span></li>
-              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Estampas exclusivas — estilo e fofura também fazem parte da cura!</span></li>
-            </ul>
-            <div class="blockquote-card" style="margin-bottom:24px;">
-              <p style="font-size:13px;color:var(--aria-muted);line-height:1.65;margin:0;">Ao comprar uma roupinha pós-cirúrgica, você <strong>transforma amor em cuidado</strong>. Todo o lucro do Instituto ARIA é revertido para o tratamento e recuperação de animais que precisam de atendimento.</p>
-            </div>
-            <!-- Tabela de tamanhos compacta -->
-            <h4 style="margin-bottom:10px;">Tabela de tamanhos e preços</h4>
-            <div style="overflow-x:auto;margin-bottom:20px;">
-              <table style="width:100%;border-collapse:collapse;font-size:13px;">
-                <thead>
-                  <tr style="background:var(--aria-plum);color:#fff;">
-                    <th style="padding:6px 10px;text-align:left;">Tam.</th>
-                    <th style="padding:6px 10px;text-align:left;">Peso aprox.</th>
-                    <th style="padding:6px 10px;text-align:left;">Valor</th>
-                    <th style="padding:6px 10px;text-align:left;">Tam.</th>
-                    <th style="padding:6px 10px;text-align:left;">Peso aprox.</th>
-                    <th style="padding:6px 10px;text-align:left;">Valor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">00</td><td>0,5–1 kg</td><td><strong>R$44,99</strong></td><td>09</td><td>10–13 kg</td><td><strong>R$49,99</strong></td></tr>
-                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">0</td><td>1–1,5 kg</td><td><strong>R$44,99</strong></td><td>10</td><td>13–16 kg</td><td><strong>R$59,99</strong></td></tr>
-                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">01</td><td>2–3 kg</td><td><strong>R$44,99</strong></td><td>11</td><td>16–20 kg</td><td><strong>R$59,99</strong></td></tr>
-                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">02</td><td>3–4 kg</td><td><strong>R$44,99</strong></td><td>12</td><td>20–24 kg</td><td><strong>R$59,99</strong></td></tr>
-                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">03</td><td>4–5 kg</td><td><strong>R$44,99</strong></td><td>13</td><td>24–30 kg</td><td><strong>R$80,00</strong></td></tr>
-                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">04</td><td>5–6 kg</td><td><strong>R$44,99</strong></td><td>14</td><td>30–35 kg</td><td><strong>R$80,00</strong></td></tr>
-                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">05</td><td>6–7 kg</td><td><strong>R$44,99</strong></td><td>15</td><td>35–45 kg</td><td><strong>R$80,00</strong></td></tr>
-                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">06</td><td>7–8 kg</td><td><strong>R$49,99</strong></td><td>16</td><td>45+ kg</td><td><strong>R$96,00</strong></td></tr>
-                  <tr style="background:var(--aria-ivory);"><td style="padding:5px 10px;">07</td><td>8–9 kg</td><td><strong>R$49,99</strong></td><td>17</td><td>45+ kg</td><td><strong>R$96,00</strong></td></tr>
-                  <tr style="background:var(--aria-cream);"><td style="padding:5px 10px;">08</td><td>9–10 kg</td><td><strong>R$49,99</strong></td><td></td><td></td><td></td></tr>
-                </tbody>
-              </table>
-            </div>
-            <a href="https://wa.me/5591982558088?text=Ol%C3%A1!%20Quero%20comprar%20uma%20roupinha%20p%C3%B3s-cir%C3%BArgica%20do%20Instituto%20ARIA."
-               target="_blank" rel="noopener noreferrer"
-               class="btn-primary" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
-              <img src="assets/material2/whatsapp.png" alt="" aria-hidden="true" class="wa-btn-icon"/>
-              Comprar pelo WhatsApp · (91) 98255-8088
-            </a>
-          </div>
-        </div>
-      </div>
-
       <!-- Projetos emergentes -->
       <div class="section-header fade-up section-iniciativas" style="margin-bottom:36px;">
         <h2 class="iniciativas-nowrap">Iniciativas em desenvolvimento</h2>
@@ -2314,7 +2301,7 @@ footer::before {
             <img src="assets/material2/aria-jovem-botanico-sem-fundo.png" alt="Guardiões do Futuro — Instituto ARIA" loading="lazy"/>
           </div>
           <div style="padding:20px;">
-            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em desenvolvimento</div>
+            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.15);color:var(--aria-gold-text);border-color:rgba(122,85,20,.25);"><span class="status-dot" style="background:var(--aria-gold-text);"></span>Em desenvolvimento</div>
             <h3 style="font-size:22px;margin-bottom:10px;">Guardiões do Futuro</h3>
             <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Parceria com o Colégio Pitágoras para transformar alunos em agentes de transformação socioambiental — juventude que cuida do mundo.</p>
           </div>
@@ -2325,7 +2312,7 @@ footer::before {
             <img src="assets/material2/aria-universo-capa.png" alt="O Universo ARIA — canal digital do Instituto ARIA" loading="lazy"/>
           </div>
           <div style="padding:20px;">
-            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em breve</div>
+            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.15);color:var(--aria-gold-text);border-color:rgba(122,85,20,.25);"><span class="status-dot" style="background:var(--aria-gold-text);"></span>Em breve</div>
             <h3 style="font-size:22px;margin-bottom:10px;">O Universo ARIA</h3>
             <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Canal no YouTube com conteúdo digital e acessível sobre empoderamento feminino, bem-estar animal e transformação social.</p>
           </div>
@@ -2336,7 +2323,7 @@ footer::before {
             <img src="assets/material2/aria-mulher-horta-botanica-sem-fundo-ok.png" alt="Horta Comunitária — Instituto ARIA" loading="lazy"/>
           </div>
           <div style="padding:20px;">
-            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.1);color:var(--aria-gold-vivid);border-color:rgba(198,161,91,.2);"><span class="status-dot" style="background:var(--aria-gold-vivid);"></span>Em planejamento</div>
+            <div class="project-status" style="margin-bottom:12px;background:rgba(198,161,91,.15);color:var(--aria-gold-text);border-color:rgba(122,85,20,.25);"><span class="status-dot" style="background:var(--aria-gold-text);"></span>Em planejamento</div>
             <h3 style="font-size:22px;margin-bottom:10px;">Horta Comunitária</h3>
             <p style="color:var(--aria-muted);font-size:14px;line-height:1.75;">Horta urbana gerida pelas participantes do Se Prepara Menina, gerando alimentos e renda complementar para as famílias atendidas.</p>
           </div>
@@ -2346,6 +2333,184 @@ footer::before {
   </section>
 
 </div><!-- /page-projetos -->
+
+<!-- ╔══════════════════════════════════╗ -->
+<!-- ║  PÁGINA: PRODUTOS               ║ -->
+<!-- ╚══════════════════════════════════╝ -->
+<div id="page-produtos" class="page">
+
+  <div class="page-spacer"></div>
+
+  <section class="page-hero plant-zone">
+    <div class="page-hero-bg-orb" aria-hidden="true"></div>
+    <div class="container">
+      <div class="eyebrow">Loja ARIA</div>
+      <h1>Nossos Produtos</h1>
+      <p>Cada compra é um gesto de cuidado que <em>transforma vidas</em>. O lucro reverte integralmente para o Instituto.</p>
+    </div>
+  </section>
+
+  <section class="section plant-zone" style="background:var(--aria-ivory);">
+    <div class="container">
+
+      <!-- Grade de produtos -->
+      <div class="grid-2 fade-up" style="gap:28px;margin-bottom:72px;">
+
+        <!-- Card: Roupinha (disponível) -->
+        <div class="aria-card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;">
+          <div style="background:var(--aria-card);height:280px;overflow:hidden;">
+            <img src="assets/material2/cachorro-e-gato-sem-fundo-final.png" alt="Roupinha pós-cirúrgica ARIA" style="width:100%;height:100%;object-fit:cover;object-position:top center;display:block;"/>
+          </div>
+          <div style="padding:24px 28px;flex:1;display:flex;flex-direction:column;gap:12px;">
+            <span style="display:inline-block;background:rgba(122,47,62,.10);color:var(--aria-rose-text);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);">Para pets</span>
+            <h3 style="font-size:22px;margin:0;">Roupinha Pós-Cirúrgica</h3>
+            <p style="color:var(--aria-muted);font-size:14px;line-height:1.7;margin:0;flex:1;">Conforto e proteção no pós-operatório para cães e gatos. A partir de R$44,99.</p>
+            <a href="#produto-roupinha-detalhe" onclick="scrollToDetalhes();return false;"
+               class="btn-primary btn-sm" style="text-decoration:none;align-self:flex-start;margin-top:4px;">Ver detalhes</a>
+          </div>
+        </div>
+
+        <!-- Card: Camisas (em breve) -->
+        <div class="aria-card" style="padding:0;overflow:hidden;display:flex;flex-direction:column;">
+          <!-- Mini galeria de imagens -->
+          <div style="position:relative;background:var(--aria-card);">
+            <!-- Badge Em breve -->
+            <div style="position:absolute;top:14px;right:14px;z-index:5;background:var(--aria-gold);color:var(--aria-brown);font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;border-radius:var(--r-pill);">Em breve</div>
+            <!-- Imagem principal -->
+            <div id="camisa-slide" style="overflow:hidden;border-bottom:1px solid var(--aria-border-gold);">
+              <img id="camisa-img-main" src="assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.49.webp"
+                   alt="Camisa ARIA — imagem meramente ilustrativa"
+                   style="width:100%;height:240px;object-fit:cover;object-position:top;display:block;transition:opacity 260ms ease;"/>
+            </div>
+            <!-- Miniaturas -->
+            <div style="display:flex;gap:8px;padding:10px 12px;background:var(--aria-ivory);">
+              <button onclick="setCamisaImg('assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.49.webp',this)"
+                style="padding:0;border:2px solid var(--aria-wine);border-radius:6px;overflow:hidden;width:56px;height:56px;flex-shrink:0;cursor:pointer;transition:border-color var(--t);"
+                aria-label="Ver imagem 1">
+                <img src="assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.49.webp" alt="" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;pointer-events:none;"/>
+              </button>
+              <button onclick="setCamisaImg('assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.50.webp',this)"
+                style="padding:0;border:2px solid var(--aria-border-gold);border-radius:6px;overflow:hidden;width:56px;height:56px;flex-shrink:0;cursor:pointer;transition:border-color var(--t);"
+                aria-label="Ver imagem 2">
+                <img src="assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.50.webp" alt="" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;pointer-events:none;"/>
+              </button>
+              <button onclick="setCamisaImg('assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.57.webp',this)"
+                style="padding:0;border:2px solid var(--aria-border-gold);border-radius:6px;overflow:hidden;width:56px;height:56px;flex-shrink:0;cursor:pointer;transition:border-color var(--t);"
+                aria-label="Ver imagem 3">
+                <img src="assets/produtos/WhatsApp-Image-2026-06-29-at-17.18.57.webp" alt="" style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;pointer-events:none;"/>
+              </button>
+              <p style="font-size:10.5px;color:var(--aria-muted);line-height:1.4;margin:auto 0 auto 4px;font-style:italic;">* Imagens meramente<br>ilustrativas</p>
+            </div>
+          </div>
+          <div style="padding:24px 28px;flex:1;display:flex;flex-direction:column;gap:12px;">
+            <span style="display:inline-block;background:rgba(198,161,91,.15);color:var(--aria-gold-text);font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:var(--r-pill);">Para pessoas</span>
+            <h3 style="font-size:22px;margin:0;">Camisas ARIA</h3>
+            <p style="color:var(--aria-muted);font-size:14px;line-height:1.7;margin:0;flex:1;">Vista a missão. Camisas exclusivas do Instituto ARIA — em breve disponíveis na loja.</p>
+            <a href="https://wa.me/5591982558088?text=Ol%C3%A1!%20Quero%20saber%20quando%20as%20camisas%20do%20Instituto%20ARIA%20estiver%C3%A3o%20dispon%C3%ADveis."
+               target="_blank" rel="noopener noreferrer"
+               class="btn-secondary btn-sm" style="text-decoration:none;align-self:flex-start;margin-top:4px;display:inline-flex;align-items:center;gap:8px;">
+              <img src="assets/material2/whatsapp.png" alt="" aria-hidden="true" class="wa-btn-icon" style="width:16px;height:16px;"/>
+              Fale conosco no WhatsApp
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Produto: Roupinha Pós-Cirúrgica — detalhe -->
+      <div id="produto-roupinha-detalhe">
+
+        <!-- Cabeçalho do produto -->
+        <div id="produtos-disponiveis-anchor" class="section-header fade-up" style="margin-bottom:52px;">
+          <div class="eyebrow">Produtos disponíveis</div>
+          <h2>Roupinha Pós-Cirúrgica</h2>
+          <p>Conforto que cuida. Amor que cura. <strong>Ideal para cães e gatos em recuperação.</strong></p>
+        </div>
+
+        <!-- Layout principal: foto + detalhes -->
+        <div class="grid-2" style="gap:56px;align-items:start;margin-bottom:64px;">
+
+          <!-- Coluna imagem -->
+          <div class="proj-img-contain-wrap fade-up" style="box-shadow:var(--shadow-md);">
+            <img src="assets/material2/cachorro-e-gato-sem-fundo-final.png" alt="Roupinha pós-cirúrgica ARIA para cães e gatos" loading="lazy"/>
+          </div>
+
+          <!-- Coluna info -->
+          <div class="fade-up delay-1">
+
+            <!-- Tag de missão -->
+            <div class="blockquote-card" style="margin-bottom:28px;">
+              <p style="font-size:14px;color:var(--aria-muted);line-height:1.7;margin:0;">Ao comprar uma roupinha pós-cirúrgica, você <strong>transforma amor em cuidado</strong>. Todo o lucro do Instituto ARIA é revertido para o tratamento e recuperação de animais que precisam de atendimento.</p>
+            </div>
+
+            <h3 style="margin-bottom:16px;">Por que usar a roupinha ARIA?</h3>
+            <ul style="list-style:none;padding:0;margin:0 0 28px;display:flex;flex-direction:column;gap:10px;">
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Protege feridas e curativos no pós-operatório</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Evita lambeduras e coceiras</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Tecido leve, respirável e macio</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Mais conforto e tranquilidade no pós-operatório</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Ideal para cães e gatos</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Zíper nas costas para praticidade</span></li>
+              <li style="display:flex;gap:10px;align-items:flex-start;"><span style="color:var(--aria-rose-text);font-size:16px;">✦</span><span style="color:var(--aria-muted);">Estampas exclusivas — estilo e fofura também fazem parte da cura!</span></li>
+            </ul>
+
+            <!-- Tabela de tamanhos -->
+            <h4 style="margin-bottom:12px;">Tabela de tamanhos e preços</h4>
+            <div style="overflow-x:auto;margin-bottom:28px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--aria-border-gold);">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead>
+                  <tr style="background:var(--aria-plum);color:#fff;">
+                    <th style="padding:8px 12px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;">Tam.</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;">Peso aprox.</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;">Valor</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;">Tam.</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;">Peso aprox.</th>
+                    <th style="padding:8px 12px;text-align:left;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:1px;">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:6px 12px;">00</td><td>0,5–1 kg</td><td><strong>R$44,99</strong></td><td>09</td><td>10–13 kg</td><td><strong>R$49,99</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:6px 12px;">0</td><td>1–1,5 kg</td><td><strong>R$44,99</strong></td><td>10</td><td>13–16 kg</td><td><strong>R$59,99</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:6px 12px;">01</td><td>2–3 kg</td><td><strong>R$44,99</strong></td><td>11</td><td>16–20 kg</td><td><strong>R$59,99</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:6px 12px;">02</td><td>3–4 kg</td><td><strong>R$44,99</strong></td><td>12</td><td>20–24 kg</td><td><strong>R$59,99</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:6px 12px;">03</td><td>4–5 kg</td><td><strong>R$44,99</strong></td><td>13</td><td>24–30 kg</td><td><strong>R$80,00</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:6px 12px;">04</td><td>5–6 kg</td><td><strong>R$44,99</strong></td><td>14</td><td>30–35 kg</td><td><strong>R$80,00</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:6px 12px;">05</td><td>6–7 kg</td><td><strong>R$44,99</strong></td><td>15</td><td>35–45 kg</td><td><strong>R$80,00</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:6px 12px;">06</td><td>7–8 kg</td><td><strong>R$49,99</strong></td><td>16</td><td>45+ kg</td><td><strong>R$96,00</strong></td></tr>
+                  <tr style="background:var(--aria-ivory);"><td style="padding:6px 12px;">07</td><td>8–9 kg</td><td><strong>R$49,99</strong></td><td>17</td><td>45+ kg</td><td><strong>R$96,00</strong></td></tr>
+                  <tr style="background:var(--aria-cream);"><td style="padding:6px 12px;">08</td><td>9–10 kg</td><td><strong>R$49,99</strong></td><td></td><td></td><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- CTA compra -->
+            <a href="https://wa.me/5591982558088?text=Ol%C3%A1!%20Quero%20comprar%20uma%20roupinha%20p%C3%B3s-cir%C3%BArgica%20do%20Instituto%20ARIA."
+               target="_blank" rel="noopener noreferrer"
+               class="btn-primary" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;">
+              <img src="assets/material2/whatsapp.png" alt="" aria-hidden="true" class="wa-btn-icon"/>
+              Comprar pelo WhatsApp · (91) 98255-8088
+            </a>
+          </div>
+        </div>
+
+        <!-- Rodapé da seção: apelo de missão -->
+        <div style="background:var(--aria-plum);border-radius:var(--r-lg);padding:48px 40px;text-align:center;margin-top:24px;">
+          <div class="eyebrow" style="color:var(--aria-blush);justify-content:center;">Compra com propósito</div>
+          <h3 style="color:var(--aria-ivory);margin-bottom:14px;">Cada roupinha financia um resgate</h3>
+          <p style="color:rgba(255,255,255,.7);max-width:520px;margin:0 auto 28px;line-height:1.8;">O lucro das vendas vai direto para o Projeto Viralatinha — ajudando mais animais a se recuperarem com conforto e dignidade.</p>
+          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+            <a href="https://wa.me/5591982558088?text=Ol%C3%A1!%20Quero%20comprar%20uma%20roupinha%20p%C3%B3s-cir%C3%BArgica%20do%20Instituto%20ARIA."
+               target="_blank" rel="noopener noreferrer"
+               class="btn-gold" style="text-decoration:none;">Quero comprar agora</a>
+            <button class="btn-ghost" onclick="showPage('projetos')">Conheça o Viralatinha</button>
+          </div>
+        </div>
+
+      </div><!-- /produto-roupinha-detalhe -->
+    </div>
+  </section>
+
+</div><!-- /page-produtos -->
 
 <!-- ╔══════════════════════════════════╗ -->
 <!-- ║  PÁGINA: IMPACTO                ║ -->
@@ -2896,12 +3061,15 @@ footer::before {
 
           <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:32px;">
             <div class="contact-card">
-              <div class="contact-card-icon" style="background:rgba(37,211,102,.1);" aria-hidden="true">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="#25D366"><path d="M11 2C6.03 2 2 6.03 2 11c0 1.69.46 3.27 1.26 4.63L2 20l4.5-1.24A9 9 0 1011 2zm4.5 12.5c-.19.53-1.1 1-1.53 1.06-.4.06-.9.08-1.45-.09-.56-.17-1.3-.5-2.25-1.37-1.46-1.33-2.38-3.04-2.44-3.18-.07-.14-.5-.68-.5-1.3 0-.61.32-.92.43-1.04.11-.12.24-.14.32-.14.08 0 .16 0 .23.01.08 0 .18-.02.29.22.11.24.38.93.42 1 .03.07.05.15.01.24-.04.08-.06.13-.12.2-.06.07-.13.16-.18.21-.06.06-.12.13-.05.25.07.12.31.5.67.81.46.41.85.54.97.6.12.05.19.04.26-.02.07-.06.3-.35.38-.47.08-.12.16-.1.27-.06.11.04.7.33.82.39.12.06.2.09.23.14.03.05.03.29-.16.82z"/></svg>
+              <div class="contact-card-icon" style="background:rgba(37,211,102,.12);" aria-hidden="true">
+                <img src="assets/material2/whatsapp.png" alt="" style="width:26px;height:26px;object-fit:contain;display:block;"/>
               </div>
               <div>
                 <div class="contact-card-label">WhatsApp</div>
-                <a class="contact-card-value" href="https://wa.me/5591992226810" target="_blank" rel="noopener">(91) 99222-6810</a>
+                <a class="contact-card-value" href="https://wa.me/5591987671010" target="_blank" rel="noopener">(91) 9.8767-1010</a>
+                <div style="font-size:11px;color:var(--aria-muted);margin-top:2px;">Presidente</div>
+                <a class="contact-card-value" href="https://wa.me/5591982558088" target="_blank" rel="noopener" style="margin-top:6px;display:block;">(91) 9.8255-8088</a>
+                <div style="font-size:11px;color:var(--aria-muted);margin-top:2px;">Vice-presidente</div>
               </div>
             </div>
             <div class="contact-card">
@@ -2910,16 +3078,33 @@ footer::before {
               </div>
               <div>
                 <div class="contact-card-label">E-mail</div>
-                <a class="contact-card-value" href="mailto:contato@institutoaria.org.br">contato@institutoaria.org.br</a>
+                <a class="contact-card-value" href="mailto:caroline.semiramis@gmail.com">caroline.semiramis@gmail.com</a>
               </div>
             </div>
-            <div class="contact-card">
-              <div class="contact-card-icon" style="background:rgba(198,161,91,.1);" aria-hidden="true">
+            <div class="contact-card" style="align-items:flex-start;">
+              <div class="contact-card-icon" style="background:rgba(198,161,91,.1);margin-top:2px;" aria-hidden="true">
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#C6A15B" stroke-width="1.5"><path d="M11 2C7.69 2 5 4.69 5 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.31-2.69-6-6-6zm0 8.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
               </div>
-              <div>
+              <div style="flex:1;">
                 <div class="contact-card-label">Endereço</div>
-                <span class="contact-card-value" style="font-size:13.5px;color:var(--aria-brown);">Marituba, Pará — Brasil</span>
+                <a href="https://www.google.com/maps/search/?api=1&query=Rodovia+BR-316+km+12+2184A+Residencial+Citt%C3%A1+Maris+Rua+Mar+Mediterr%C3%A2neo+Bloco+28+Marituba+PA"
+                   target="_blank" rel="noopener"
+                   class="contact-card-value"
+                   style="font-size:12.5px;line-height:1.6;display:block;margin-bottom:14px;">
+                  Rodovia BR-316, km 12, nº 2184A<br>
+                  Res. Cittá Maris, R. Mar Mediterrâneo<br>
+                  Bloco 28, Ap. 204 — Bairro São João<br>
+                  Marituba – PA · CEP 67203-612
+                </a>
+                <!-- Mapa incorporado -->
+                <div style="border-radius:var(--r-md);overflow:hidden;border:1px solid var(--aria-border-gold);box-shadow:var(--shadow-sm);">
+                  <iframe
+                    src="https://maps.google.com/maps?q=Rodovia+BR-316,+km+12,+n%C2%BA+2184A,+Residencial+Citt%C3%A1+Maris,+Marituba,+PA,+67203-612&output=embed&z=16"
+                    width="100%" height="220" style="border:0;display:block;" allowfullscreen=""
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                    title="Localização do Instituto ARIA no Google Maps">
+                  </iframe>
+                </div>
               </div>
             </div>
             <div class="contact-card">
@@ -2928,7 +3113,7 @@ footer::before {
               </div>
               <div>
                 <div class="contact-card-label">Horário de atendimento</div>
-                <span class="contact-card-value" style="font-size:13.5px;color:var(--aria-brown);">Seg a Sex, 8h às 17h</span>
+                <span class="contact-card-value" style="font-size:13.5px;color:var(--aria-brown);">Segunda a Sexta, 9h às 19h</span>
               </div>
             </div>
           </div>
@@ -2936,14 +3121,14 @@ footer::before {
           <!-- Social -->
           <h4 style="font-size:16px;margin-bottom:14px;">Redes sociais</h4>
           <div style="display:flex;gap:10px;">
-            <a href="https://instagram.com/institutoaria" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram do Instituto ARIA">
+            <a href="https://instagram.com/instituto.aria.ia" target="_blank" rel="noopener" class="social-btn" aria-label="Instagram do Instituto ARIA">
               <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/><circle cx="12" cy="12" r="4" fill="white"/><circle cx="17.5" cy="6.5" r="1.5" fill="white"/><rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig)" fill-opacity=".85"/><defs><linearGradient id="ig" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" style="stop-color:#F58529"/><stop offset="50%" style="stop-color:#DD2A7B"/><stop offset="100%" style="stop-color:#8134AF"/></linearGradient></defs><circle cx="12" cy="12" r="4" fill="white"/><circle cx="17.5" cy="6.5" r="1.5" fill="white"/></svg>
             </a>
-            <a href="https://facebook.com/institutoaria" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook do Instituto ARIA">
+            <a href="https://facebook.com/instituto.aria.ia" target="_blank" rel="noopener" class="social-btn" aria-label="Facebook do Instituto ARIA">
               <svg viewBox="0 0 24 24" fill="#1877F2"><path d="M22 12C22 6.48 17.52 2 12 2S2 6.48 2 12c0 5 3.66 9.12 8.44 9.88v-6.99H7.9V12h2.54V9.8c0-2.5 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.46h-1.26c-1.24 0-1.62.77-1.62 1.56V12h2.76l-.44 2.89h-2.32v6.99C18.34 21.12 22 17 22 12z"/></svg>
             </a>
-            <a href="https://wa.me/5591992226810" target="_blank" rel="noopener" class="social-btn" aria-label="WhatsApp do Instituto ARIA" style="background:var(--aria-wine);">
-              <svg viewBox="0 0 24 24" fill="white"><path d="M11 2C6.03 2 2 6.03 2 11c0 1.69.46 3.27 1.26 4.63L2 20l4.5-1.24A9 9 0 1011 2zm4.5 12.5c-.19.53-1.1 1-1.53 1.06-.4.06-.9.08-1.45-.09-.56-.17-1.3-.5-2.25-1.37-1.46-1.33-2.38-3.04-2.44-3.18-.07-.14-.5-.68-.5-1.3 0-.61.32-.92.43-1.04.11-.12.24-.14.32-.14.08 0 .16 0 .23.01.08 0 .18-.02.29.22.11.24.38.93.42 1 .03.07.05.15.01.24-.04.08-.06.13-.12.2-.06.07-.13.16-.18.21-.06.06-.12.13-.05.25.07.12.31.5.67.81.46.41.85.54.97.6.12.05.19.04.26-.02.07-.06.3-.35.38-.47.08-.12.16-.1.27-.06.11.04.7.33.82.39.12.06.2.09.23.14.03.05.03.29-.16.82z"/></svg>
+            <a href="https://wa.me/5591987671010" target="_blank" rel="noopener" class="social-btn" aria-label="WhatsApp do Instituto ARIA" style="background:var(--aria-wine);">
+              <img src="assets/material2/whatsapp.png" alt="" aria-hidden="true" style="width:18px;height:18px;object-fit:contain;display:block;"/>
             </a>
           </div>
 
@@ -3086,16 +3271,16 @@ footer::before {
           </div>
         </div>
         <p>Acolher para cuidar, cuidar para transformar. Uma organização dedicada ao desenvolvimento integral de pessoas e ao respeito pela vida animal.</p>
-        <p class="footer-cnpj">CNPJ: 67.555.170/0001-03 · Marituba, Pará — Brasil</p>
+        <p class="footer-cnpj">CNPJ: 67.555.170/0001-03<br>Marituba, Pará — Brasil</p>
         <div class="footer-social" aria-label="Redes sociais">
-          <a class="social-btn" href="https://instagram.com/institutoaria" target="_blank" rel="noopener" aria-label="Instagram">
+          <a class="social-btn" href="https://instagram.com/instituto.aria.ia" target="_blank" rel="noopener" aria-label="Instagram">
             <svg viewBox="0 0 24 24" fill="white"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4" fill="#3D2334"/><circle cx="16.5" cy="7.5" r="1.3" fill="#3D2334"/></svg>
           </a>
-          <a class="social-btn" href="https://facebook.com/institutoaria" target="_blank" rel="noopener" aria-label="Facebook">
+          <a class="social-btn" href="https://facebook.com/instituto.aria.ia" target="_blank" rel="noopener" aria-label="Facebook">
             <svg viewBox="0 0 24 24" fill="white"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
           </a>
-          <a class="social-btn" href="https://wa.me/5591992226810" target="_blank" rel="noopener" aria-label="WhatsApp" style="background:var(--aria-wine);">
-            <svg viewBox="0 0 24 24" fill="white"><path d="M11 2C6.03 2 2 6.03 2 11c0 1.69.46 3.27 1.26 4.63L2 20l4.5-1.24A9 9 0 1011 2zm4.5 12.5c-.19.53-1.1 1-1.53 1.06-.4.06-.9.08-1.45-.09-.56-.17-1.3-.5-2.25-1.37-1.46-1.33-2.38-3.04-2.44-3.18-.07-.14-.5-.68-.5-1.3 0-.61.32-.92.43-1.04.11-.12.24-.14.32-.14l.23.01c.08 0 .18-.02.29.22.11.24.38.93.42 1 .03.07.05.15.01.24-.04.08-.06.13-.12.2-.06.07-.13.16-.18.21-.06.06-.12.13-.05.25.07.12.31.5.67.81.46.41.85.54.97.6.12.05.19.04.26-.02.07-.06.3-.35.38-.47.08-.12.16-.1.27-.06.11.04.7.33.82.39.12.06.2.09.23.14.03.05.03.29-.16.82z"/></svg>
+          <a class="social-btn" href="https://wa.me/5591987671010" target="_blank" rel="noopener" aria-label="WhatsApp" style="background:var(--aria-wine);">
+            <img src="assets/material2/whatsapp.png" alt="" aria-hidden="true" style="width:18px;height:18px;object-fit:contain;display:block;"/>
           </a>
         </div>
       </div>
@@ -3107,6 +3292,7 @@ footer::before {
           <li><a href="#" onclick="showPage('home')" role="button" tabindex="0">Início</a></li>
           <li><a href="#" onclick="showPage('quemsomos')" role="button" tabindex="0">Quem Somos</a></li>
           <li><a href="#" onclick="showPage('projetos')" role="button" tabindex="0">Projetos</a></li>
+          <li><a href="#" onclick="showPage('produtos')" role="button" tabindex="0">Produtos</a></li>
           <li><a href="#" onclick="showPage('impacto')" role="button" tabindex="0">Impacto</a></li>
           <li><a href="#" onclick="showPage('apoie')" role="button" tabindex="0">Apoie</a></li>
           <li><a href="#" onclick="showPage('contato')" role="button" tabindex="0">Contato</a></li>
@@ -3130,17 +3316,22 @@ footer::before {
       <div class="footer-col footer-contato-col">
         <h5>Contato</h5>
         <div class="footer-contact-item">
-          <svg viewBox="0 0 16 16"><path d="M11 3C7.69 3 5 5.69 5 9c0 3 4 8 4 8s4-5 4-8c0-3.31-2.69-6-6-6z"/></svg>
-          <span>Marituba, Pará — Brasil</span>
+          <svg viewBox="0 0 16 16"><path d="M8 1C5.24 1 3 3.24 3 6c0 3.75 5 9 5 9s5-5.25 5-9c0-2.76-2.24-5-5-5zm0 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+          <span>Marituba – PA, Brasil</span>
         </div>
         <div class="footer-contact-item">
           <svg viewBox="0 0 16 16"><rect x="1" y="2.5" width="14" height="11" rx="1.5"/><path d="M1 5.5l7 4 7-4"/></svg>
-          <a href="mailto:contato@institutoaria.org.br">contato@institutoaria.org.br</a>
+          <a href="mailto:caroline.semiramis@gmail.com">caroline.semiramis@gmail.com</a>
         </div>
-        <div class="footer-contact-item">
-          <svg viewBox="0 0 16 16"><path d="M14 11l-2.5-2.5-1.5 1.5c-1-1-2-2-3-3l1.5-1.5L6 3 4 5c0 4 7 11 7 11l3-3z"/></svg>
-          <a href="https://wa.me/5591992226810" target="_blank" rel="noopener">(91) 99222-6810</a>
-        </div>
+		<div class="footer-contact-item" style="display: flex; align-items: flex-start; gap: 8px;">
+		  <svg viewBox="0 0 16 16" width="16" height="16" style="margin-top: 4px;"><path d="M14 11l-2.5-2.5-1.5 1.5c-1-1-2-2-3-3l1.5-1.5L6 3 4 5c0 4 7 11 7 11l3-3z"/></svg>
+		  
+		  <div style="display: flex; flex-direction: column; gap: 4px;">
+			<a href="https://wa.me/5591987671010" target="_blank" rel="noopener">(91) 9.8767-1010</a>
+			<a href="https://wa.me/5591982558088" target="_blank" rel="noopener">(91) 9.8255-8088</a>
+		  </div>
+		</div>
+		</div>
         <div class="footer-newsletter">
           <p>Newsletter</p>
           <div class="footer-nl-form">
@@ -3170,7 +3361,7 @@ footer::before {
 <!-- ╚══════════════════════════════════╝ -->
 
 <!-- WhatsApp float -->
-<a class="wa-float" href="https://wa.me/5591992226810" target="_blank" rel="noopener" aria-label="Fale conosco pelo WhatsApp"><img src="data:image/png;base64,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" alt="WhatsApp"/></a>
+<a class="wa-float" href="https://wa.me/5591987671010" target="_blank" rel="noopener" aria-label="Fale conosco pelo WhatsApp"><img src="data:image/png;base64,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" alt="WhatsApp"/></a>
 
 <!-- Mobile CTA bar -->
 <div id="mobile-cta-bar" role="complementary" aria-label="Acesso rápido">
@@ -3194,6 +3385,27 @@ footer::before {
 <!-- ║  JAVASCRIPT                     ║ -->
 <!-- ╚══════════════════════════════════╝ -->
 <script>
+/* ─── SCROLL VER DETALHES (offset sticky nav) ─── */
+function scrollToDetalhes() {
+  const el = document.getElementById('produtos-disponiveis-anchor');
+  if (!el) return;
+  const navH = 66; // altura do sticky nav
+  const top = el.getBoundingClientRect().top + window.scrollY - navH - 16;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+}
+
+/* ─── GALERIA CAMISAS ─── */
+function setCamisaImg(src, btn) {
+  const img = document.getElementById('camisa-img-main');
+  if (!img) return;
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = src; img.style.opacity = '1'; }, 180);
+  document.querySelectorAll('#camisa-slide ~ div button').forEach(b => {
+    b.style.borderColor = 'var(--aria-border-gold)';
+  });
+  if (btn) btn.style.borderColor = 'var(--aria-wine)';
+}
+
 /* ─── NAVEGAÇÃO ENTRE PÁGINAS ─── */
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -3212,8 +3424,8 @@ function showPage(id) {
 
 function updateActiveLink(id) {
   const map = {
-    home: 0, quemsomos: 1, projetos: 2, impacto: 3,
-    contato: 4, apoie: 4, restrita: 5, privacidade: 5
+    home: 0, quemsomos: 1, projetos: 2, produtos: 3, impacto: 4,
+    contato: 5, apoie: 5, restrita: 6, privacidade: 6
   };
   document.querySelectorAll('.nav-link').forEach((l, i) => {
     l.classList.toggle('active-link', i === map[id]);
@@ -3417,12 +3629,41 @@ window.showPage = function(id) {
   setTimeout(() => { if (window.recheckPlantPoints) window.recheckPlantPoints(); }, 120);
 };
 
+/* Hero carousel — avança a cada 3 segundos */
+(function() {
+  var slides = document.querySelectorAll('#heroCarousel .hero-slide');
+  if (slides.length < 2) return;
+  var cur = 0;
+  setInterval(function() {
+    slides[cur].classList.remove('active');
+    cur = (cur + 1) % slides.length;
+    slides[cur].classList.add('active');
+  }, 3000);
+})();
+
+/* Barra "Doe" — slide após 5s, esconde ao rolar, volta após 5s parado */
+(function() {
+  var bar = document.getElementById('mobile-cta-bar');
+  if (!bar) return;
+  var scrollTimer = null;
+  function mostrar() { bar.classList.add('visible'); }
+  function esconder() { bar.classList.remove('visible'); }
+  setTimeout(function() {
+    mostrar();
+    window.addEventListener('scroll', function() {
+      esconder();
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(mostrar, 5000);
+    }, { passive: true });
+  }, 5000);
+})();
+
 </script>
 
 <!-- ── MODAL ÚNICO — Depoimentos & Casos de Resgate ── -->
 <div id="impact-modal-backdrop" class="impact-modal-backdrop"
      role="dialog" aria-modal="true" aria-labelledby="impact-modal-name"
-     style="display:flex;">
+     style="display:none;">
   <div class="impact-modal-panel" id="impact-modal-panel">
     <button class="impact-modal-close" id="impact-modal-close-btn" aria-label="Fechar">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
@@ -3475,7 +3716,7 @@ window.showPage = function(id) {
   var MAX_PLANTS      = 5;   // máximo de plantas por página
 
   // ── Âncoras de posicionamento seguro (Zonas Permitidas) ───────────────────
-  var W = [45, 35, 20]; // pesos para 3, 4 e 5 plantas
+  var W = [65, 30, 5]; // pesos para 3, 4 e 5 plantas — maioria com 3 (menos concentração)
   var W_CUM = (function () {
     var c = [], s = 0;
     W.forEach(function (w) { s += w; c.push(s); });
@@ -3758,9 +3999,9 @@ window.showPage = function(id) {
         toPlace.push(point);
       });
 
-      // ── Distribuição 40 / 30 / 30 — topo / meio / base da página ────────────
-      // Aplicada APÓS o filtro existente, sem alterar configurações das flores.
-      // Divide a página em três faixas verticais e garante a proporção desejada.
+      // ── Distribuição 26 / 37 / 37 — topo / meio / base da página ─────────────
+      // Topo recebe 30% menos que as outras zonas (mid = bot = X, top = 0.7X).
+      // Divide a página em três faixas verticais iguais e garante a proporção.
       if (toPlace.length > 2) {
         var pageH = Math.max(
           document.body.scrollHeight,
@@ -3777,9 +4018,9 @@ window.showPage = function(id) {
           else                      bBot.push(p);
         });
         var n    = toPlace.length;
-        var nTop = Math.round(n * 0.40);
-        var nMid = Math.round(n * 0.30);
-        var nBot = n - nTop - nMid;
+        var nTop = Math.round(n * 0.26); // 30% menos que mid/bot
+        var nMid = Math.round(n * 0.37);
+        var nBot = n - nTop - nMid;      // ~37%
         function pickBand(arr, count) {
           return arr.slice()
             .sort(function () { return rand() - 0.5; })
@@ -3858,7 +4099,12 @@ window.showPage = function(id) {
     });
     var rand = mulberry32(baseSeed * 53 + getTimeSeed() * 7);
     var pid  = 1 + Math.floor(rand() * TOTAL_PLANTS);
-    plantAt(zoneEl, '50%', '55%', pid, false, false, false);
+    // Para a zona do overlay mobile: posição horizontal aleatória, nasce da base
+    var xPos = zoneEl.id === 'sway-slow-zone-1'
+      ? (20 + Math.floor(rand() * 60)) + '%'
+      : '50%';
+    var yPos = zoneEl.id === 'sway-slow-zone-1' ? '80%' : '55%';
+    plantAt(zoneEl, xPos, yPos, pid, false, false, false);
   }
 
   // ── Inicialização ─────────────────────────────────────────────────────────
@@ -4191,6 +4437,7 @@ window.showPage = function(id) {
   function openModal(data, isRescue) {
     lastFocus = document.activeElement;
     populateModal(data, isRescue);
+    backdrop.style.display = 'flex';
     backdrop.classList.add('open');
     document.body.style.overflow = 'hidden';
     setTimeout(function() { closeBtn.focus(); }, 50);
@@ -4198,6 +4445,7 @@ window.showPage = function(id) {
 
   function closeModal() {
     backdrop.classList.remove('open');
+    setTimeout(function() { backdrop.style.display = 'none'; }, 310);
     document.body.style.overflow = '';
     if (lastFocus) lastFocus.focus();
   }
@@ -4216,10 +4464,10 @@ window.showPage = function(id) {
   });
   closeBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+    if (e.key === 'Escape') closeModal();
   });
+
 })();
 </script>
 </body>
 </html>
->
